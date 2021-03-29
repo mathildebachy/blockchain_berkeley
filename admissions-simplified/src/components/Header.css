@@ -2,23 +2,33 @@
     background-color:#292c35;
     font-family: Arial, Helvetica, sans-serif;
     color: #dcae52;
+    height: 10vh;
+
     display: flex;
     flex-direction: row;
     align-items: center;
+    align-content: center;
     justify-content: space-between;
 }
 
-.header div {
+
+.container {
+    display: flex;
+    flex-direction: row;
+    /*flex: 1 0 auto; /*fill up the available space*/ 
     border-width: 5px;
     border: solid chartreuse;
+    padding: 2vh;
 }
 
-.header a {
+a {
     text-decoration: none;
     color: #dcae52;
 }
 
-.header-buttons {
-    display: flex;
-    flex-direction: row;
+img {
+    max-height: 6vh;
 }
+
+
+
