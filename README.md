@@ -12,5 +12,7 @@ Back-end
 
 Front-end
   - initiate an app folder to build our web app : admissions_simplified
-      - initiate the API folder to communicate with Tezos blockchain
-  - still learning HTML, CSS and JavaScript for the moment (40 hours of tutorial)
+      - Home page
+      - Student request page
+      - Registrr dashboard
+
