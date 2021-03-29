@@ -1,0 +1,52 @@
+.home {
+    padding: 20px;
+    height: 75vh;
+
+    background-color:#e9e2c9;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #292c35;
+    
+    background-image: url("./../assets/background_style.png");
+    background-size: 40%;
+    background-position: 70vw 50vh;
+    background-repeat: no-repeat;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.home h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 60px;
+    color: #292c35;
+}
+
+.text{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    color: #292c35;
+}
+
+.home_buttons {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin: 2vh;
+}
+
+.home_buttons div {
+    color: #dcae52;
+    align-content: center;
+    align-items: center;
+    margin: 2vh 5vw;
+    padding: 1vh 2vw;
+    background-color: #292c35;
+    border-radius: 5px;
+}
+
+.home_buttons div:hover {
+    color: #292c35;
+    background-color: #dcae52;
+    cursor: pointer;
+}

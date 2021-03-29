@@ -10,20 +10,20 @@ class Header extends React.Component {
           
           <div class="container">
             <a href="/">
-              <img src={logo} alt="logo"></img>
+              <img class="App-logo" src={logo} alt="logo"></img>
             </a>
           </div>
 
-          <div class="container">
-              <a href="/">How it works</a>
+          <div class="container header_button">
+              <p>How it works</p>
           </div>
 
-          <div class="container">
-              <a href="/">Stats</a>
+          <div class="container header_button">
+              <p>Stats</p>
           </div>
           
-          <div class="container">
-            <a href="/">Login</a>
+          <div class="container header_button">
+            <p>Login</p>
           </div>
         </div>
       );

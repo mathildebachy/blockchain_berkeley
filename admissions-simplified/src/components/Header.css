@@ -1,8 +1,14 @@
 .header {
+    position: sticky;
+    top: 0px;
+    z-index: 9999;
+
     background-color:#292c35;
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
     color: #dcae52;
-    height: 10vh;
+    height: 8vh;
+    /*border: solid #dcae52;*/
 
     display: flex;
     flex-direction: row;
@@ -13,22 +19,47 @@
 
 
 .container {
+    height: 8vh;
+    color: #dcae52;
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
     /*flex: 1 0 auto; /*fill up the available space*/ 
     border-width: 5px;
-    border: solid chartreuse;
-    padding: 2vh;
+    /*border: solid chartreuse;*/
 }
 
-a {
-    text-decoration: none;
-    color: #dcae52;
+.header_button {
+    width: 15vw;
+    border-radius: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+.header_button:hover {
+    color: #292c35;
+    background-color: #dcae52;
+    cursor: pointer;
 }
 
-img {
+.header img {
+    padding: 1vh;
     max-height: 6vh;
 }
 
+/* @media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+      animation: App-logo-spin infinite 20s linear;
+    }
+  }
+  
+@keyframes App-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+} */
 
 

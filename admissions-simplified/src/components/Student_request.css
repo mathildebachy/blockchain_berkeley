@@ -1,0 +1,32 @@
+.student_request {
+    padding: 20px;
+    height: 75vh;
+
+    background-color:#e9e2c9;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #292c35;
+    
+    background-image: url("./../assets/background_style.png");
+    background-size: 40%;
+    background-position: 70vw 50vh;
+    background-repeat: no-repeat;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-items: center;
+    /*
+    grid-template-columns: 25% 25% 25% 25% ;
+    grid-template-rows: 50px;*/
+}
+/*
+.main_input {
+    grid-column-start: 1;
+}
+*/
