@@ -8,21 +8,21 @@ class Header extends React.Component {
       return (
         <div className="header">
           
-          <div class="container">
+          <div className="container">
             <a href="/">
-              <img class="App-logo" src={logo} alt="logo"></img>
+              <img className="App-logo" src={logo} alt="logo"></img>
             </a>
           </div>
 
-          <div class="container header_button">
+          <div className="container header_button">
               <p>How it works</p>
           </div>
 
-          <div class="container header_button">
+          <div className="container header_button">
               <p>Stats</p>
           </div>
           
-          <div class="container header_button">
+          <div className="container header_button">
             <p>Login</p>
           </div>
         </div>

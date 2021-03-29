@@ -28,6 +28,13 @@
     color: #292c35;
 }
 
+ .text-link{
+    color: inherit;
+    text-decoration: inherit;
+    align-content: center;
+    align-items: center;
+} 
+
 .home_buttons {
     display: flex;
     justify-content: center;

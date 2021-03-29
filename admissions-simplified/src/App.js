@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <Student_request />
+      <Home />
       <Footer />
     </div>
   );

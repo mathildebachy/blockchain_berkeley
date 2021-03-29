@@ -12,7 +12,7 @@ class Footer extends React.Component {
             <img src={logo_scet}></img>
           </div>
 
-          <div class="footer_button">
+          <div className="footer_button">
             <p>Contact us</p>
           </div>
 
