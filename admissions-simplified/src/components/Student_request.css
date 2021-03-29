@@ -19,8 +19,8 @@
 form {
     display: flex;
     flex-direction: column;
-    align-items: start;
-    justify-items: center;
+    align-items: center;
+    justify-items: start;
     /*
     grid-template-columns: 25% 25% 25% 25% ;
     grid-template-rows: 50px;*/
@@ -30,3 +30,38 @@ form {
     grid-column-start: 1;
 }
 */
+
+label {
+    padding: 2vh;
+}
+
+.label {
+    margin-bottom: 2vh;
+}
+
+.submit {
+    padding: 2vh;
+    margin: 2vh;
+    border-radius: 5px;
+    color: #dcae52;
+    background-color: #292c35;
+}
+.submit:hover {
+    cursor: pointer;
+    color: #292c35;
+    background-color: #dcae52;
+
+}
+
+.form_containter {
+    margin-left: 2vh;
+}
+
+.submit:focus{
+    outline: none;
+}
+
+.border {
+    border: solid #292c35;
+    margin: 0 26vw;
+}
