@@ -3,7 +3,6 @@ import {Row, Col, Card, Table, Tabs, Tab} from 'react-bootstrap';
 
 import Aux from "../hoc/_Aux";
 import DEMO from "../store/constant";
-import Header from './header2.js';
 
 import avatar1 from '../assets/images/user/avatar-1.jpg';
 import avatar2 from '../assets/images/user/avatar-2.jpg';
@@ -75,7 +74,6 @@ class Dashboard extends React.Component {
         return (
             <Aux>
                 <Row className='background'>
-                <Header />
                     <Col md={6} xl={8}>
                         <Card className='Recent-Users'>
                             <Card.Header>
