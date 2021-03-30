@@ -13,17 +13,17 @@ class Home extends React.Component {
             <p className="text">Forgery-proof and 100% digital certificates: more than 100 institutions and 15 countries trust in us to issue blockchain digital credentials</p>
           </div>
 
-          <div className="home_buttons">
-            <div>
-              <Link to='/Student_request' className='text-link'>
-                <p>I'm a student</p>
-              </Link>
-            </div>
-            <div>
-              <Link to='/registrar' className='text-link'>
+          <div class="home_buttons">
+            <Link to='/Student_request'>
+              <button class="home_button">
+                  <p>I'm a student</p>
+              </button>
+            </Link>
+            <Link to='/registrar' className='text-link'>
+              <button class="home_button">
                 <p>I'm a registrar</p>
-              </Link>
-            </div>
+              </button>
+            </Link>
           </div>
         </div>
       );

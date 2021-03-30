@@ -8,9 +8,7 @@ import Student_request from './components/Student_request';
 function App() {
   return (
     <div className="App">
-      <Header />
-      <Home />
-      <Footer />
+      <Home/>
     </div>
   );
 }

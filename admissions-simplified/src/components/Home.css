@@ -42,7 +42,7 @@
     margin: 2vh;
 }
 
-.home_buttons div {
+.home_button {
     color: #dcae52;
     align-content: center;
     align-items: center;
@@ -52,7 +52,7 @@
     border-radius: 5px;
 }
 
-.home_buttons div:hover {
+.home_button:hover {
     color: #292c35;
     background-color: #dcae52;
     cursor: pointer;
