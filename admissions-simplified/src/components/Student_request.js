@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './Student_request.css';
-import digital_icon from './../assets/digital_icon.png'
 
 class Student_request extends React.Component {
   constructor(props) {
@@ -14,7 +12,6 @@ class Student_request extends React.Component {
       semester: '',
       transcript_year: '',
       isTranscript: false,
-
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,7 +22,7 @@ class Student_request extends React.Component {
     if (event.target.name === 'doc_type'){
       if (event.target.value === 'transcript') {
         this.setState({isTranscript: true})
-        this.setState({semester:'Fall'})
+        this.setState({semester: 'Fall'})
       }
       else {
         this.setState({isTranscript: false})
