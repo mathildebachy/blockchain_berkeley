@@ -35,7 +35,14 @@ class Student_request extends React.Component {
 
   handleSubmit(event) {
     // Connection avec la DB
-    console.log('submited with '+this.state.first_name +this.state.transcript_year+this.state.semester)
+    console.log('submited with '+this.state.first_name +this.state.transcript_year+this.state.semester);
+    
+    // Reset the fields of this.state
+    for (const key of Object.keys(this.state)) {
+      this.setState({[key]: ''})
+    }
+    this.setState({isTranscript: false})
+
     event.preventDefault();
   }
 

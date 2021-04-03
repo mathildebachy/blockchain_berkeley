@@ -31,4 +31,3 @@ class Home extends React.Component {
   }
   
   export default Home;
-  // Example usage: <ShoppingList name="Mark" />
