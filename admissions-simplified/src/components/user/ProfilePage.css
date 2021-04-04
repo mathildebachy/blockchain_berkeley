@@ -1,0 +1,37 @@
+.global-wrapper {
+    padding: 20px;
+    height: 75vh;
+
+    background-color:#e9e2c9;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #292c35;
+    
+    background-image: url("../../assets/background_style.png");
+    background-size: 40%;
+    background-position: 70vw 50vh;
+    background-repeat: no-repeat;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.profile-card {
+    border: solid black;
+}
+
+.signout-button {
+    width: 10vw;
+    height: 3vh;
+    border-radius: 5px;
+    text-align: center;
+    vertical-align: middle;
+    color: #dcae52;
+    background-color: #292c35;
+}
+
+.signout-button:hover {
+    color: #292c35;
+    background-color: #dcae52;
+    cursor: pointer;
+}
