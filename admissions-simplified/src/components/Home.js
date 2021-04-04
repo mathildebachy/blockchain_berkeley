@@ -14,7 +14,7 @@ class Home extends React.Component {
           </div>
 
           <div class="home_buttons">
-            <Link to='/Student_request'>
+            <Link to='/student-request'>
               <button class="home_button">
                   <p>I'm a student</p>
               </button>
