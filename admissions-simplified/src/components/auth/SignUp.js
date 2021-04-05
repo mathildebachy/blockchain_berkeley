@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import {Link} from "react-router-dom";
-import { auth, signInWithGoogle, generateUserDocument } from "../../firebase";
+import { auth, signInWithGoogle, generateUserDocument } from "../../back-end/firebase";
 import './SignUp.css'
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const [userType, setUserType] = useState("");
   const [error, setError] = useState(null);
   
   const createUserWithEmailAndPasswordHandler = async (event, email, password) => {
     event.preventDefault();
     try{
       const {user} = await auth.createUserWithEmailAndPassword(email, password);
-      generateUserDocument(user, {displayName});
+      generateUserDocument(user, {displayName, userType});
     }
     catch(error){
       setError('Error Signing up with email and password');
@@ -22,6 +23,7 @@ const SignUp = () => {
     setEmail("");
     setPassword("");
     setDisplayName("");
+    setUserType("");
   };
   
   const onChangeHandler = event => {
@@ -32,6 +34,9 @@ const SignUp = () => {
       setPassword(value);
     } else if (name === "displayName") {
       setDisplayName(value);
+    }
+    else if (name === "userType"){
+      setUserType(value);
     }
   };
   
@@ -78,6 +83,25 @@ const SignUp = () => {
             id="userPassword"
             onChange={event => onChangeHandler(event)}
           />
+          <div className="margin">
+            <p>I'm a:</p>
+            <label>
+              <input
+              type="radio"
+              name="userType"
+              value="student"
+              onChange={event => onChangeHandler(event)}
+              />Student
+            </label>
+            <label>
+              <input
+              type="radio"
+              name="userType"
+              value="university"
+              onChange={event => onChangeHandler(event)}
+              />University
+            </label>
+          </div>
           <button
             className="signup-button margin"
             onClick={event => {

@@ -18,10 +18,10 @@ const Header = () => {
           <p>How it works</p>
       </div>
 
-      <div className="container header_button">
-          <p>Stats</p>
-      </div>
-      
+      <Link to='/student-dashboard' className='container header_button link'>
+        <p>Dashboard</p>
+      </Link>
+
       <Link to='/profile' className='container header_button link'>
         <p>My profile</p>
       </Link>

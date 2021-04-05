@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, Redirect, useHistory } from "react-router-dom";
-import { auth, signInWithGoogle } from "../../firebase";
+import { auth, signInWithGoogle } from "../../back-end/firebase";
 import { UserContext } from '../../providers/UserProvider'
 import './SignIn.css'
 

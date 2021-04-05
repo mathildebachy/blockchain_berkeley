@@ -1,17 +1,9 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";  
-  
-var firebaseConfig = {
-apiKey: "AIzaSyA1dE9dodWGKk0DOEK5L1OW0553xXrlYUs",
-authDomain: "blockchain-berkeley.firebaseapp.com",
-projectId: "blockchain-berkeley",
-storageBucket: "blockchain-berkeley.appspot.com",
-messagingSenderId: "757129228193",
-appId: "1:757129228193:web:bb10892b7980b6badf65e0"
-};
+import { firebaseConfig } from './firebase.config'
 
-firebase.initializeApp(firebaseConfig);
+
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
