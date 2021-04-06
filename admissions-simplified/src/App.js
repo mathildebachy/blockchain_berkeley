@@ -22,7 +22,6 @@ import EnhancedTable from './components/dashboard/StudentDashboard'
 function App() {
   return(
     <FirestoreProvider {...firebaseConfig} firebase={firebase}>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
       <UserProvider>
         <BrowserRouter>
           <div>

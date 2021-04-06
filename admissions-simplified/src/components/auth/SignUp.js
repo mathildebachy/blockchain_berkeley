@@ -1,20 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {Link} from "react-router-dom";
 import { auth, signInWithGoogle, generateUserDocument } from "../../back-end/firebase";
 import './SignUp.css'
+
+import { getAllRegistrar } from '../../back-end/functions'
+
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import { makeStyles } from '@material-ui/core/styles';
+
+import PropTypes from 'prop-types';
+import { setRef } from "@material-ui/core";
+
+
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [userType, setUserType] = useState("");
+  const [assignedHS, setAssignedHS] = useState("");
   const [error, setError] = useState(null);
+  const [value, setValue] = useState(0);
+  const [isStudent, setIsStudent] = useState(false);
+  const [registrarList, setRegistrarList] = useState([]);
+
+  
+  useEffect(() => {
+    getAllRegistrar().then(res => {
+      setRegistrarList(res)
+    })
+  }, [])
   
   const createUserWithEmailAndPasswordHandler = async (event, email, password) => {
     event.preventDefault();
     try{
       const {user} = await auth.createUserWithEmailAndPassword(email, password);
-      generateUserDocument(user, {displayName, userType});
+      if (assignedHS !== "") generateUserDocument(user, {displayName, userType, assignedHS});
+      else generateUserDocument(user, {displayName, userType});
     }
     catch(error){
       setError('Error Signing up with email and password');
@@ -24,6 +50,8 @@ const SignUp = () => {
     setPassword("");
     setDisplayName("");
     setUserType("");
+    setIsStudent(false);
+    setAssignedHS("")
   };
   
   const onChangeHandler = event => {
@@ -35,8 +63,18 @@ const SignUp = () => {
     } else if (name === "displayName") {
       setDisplayName(value);
     }
+    else if (name === "assignedHS") {
+      setAssignedHS(value)
+    }
     else if (name === "userType"){
       setUserType(value);
+      if (value === "student"){
+        setIsStudent(true);
+      }
+      else {
+        setIsStudent(false);
+        setAssignedHS("")
+      }
     }
   };
   
@@ -50,7 +88,7 @@ const SignUp = () => {
           </div>
         )}
         <form>
-          <label htmlFor="displayName" className="block">
+          <label htmlfor="displayname" classname="block">
             Display Name:
           </label>
           <input
@@ -101,7 +139,28 @@ const SignUp = () => {
               onChange={event => onChangeHandler(event)}
               />University
             </label>
+            <label>
+              <input
+              type="radio"
+              name="userType"
+              value="highschool"
+              onChange={event => onChangeHandler(event)}
+              />High School
+            </label>
           </div>
+          {isStudent 
+            ? <div className="margin">
+                <label htmlfor="assignedHS" classname="block">
+                  Current High School:
+                </label>
+                <select value={assignedHS} name="assignedHS" onChange={event=>onChangeHandler(event)}>
+                  {registrarList.map(registrar => (
+                    <option value={registrar.displayName}>{registrar.displayName}</option>
+                  ))}
+                </select>
+              </div>
+              : <div></div>
+          }
           <button
             className="signup-button margin"
             onClick={event => {

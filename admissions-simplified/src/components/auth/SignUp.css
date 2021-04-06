@@ -19,7 +19,7 @@
 .signup-card{
     border: solid #292c35 1px;
     border-radius: 5px;
-    height: 50vh;
+    min-height: 50vh;
     width: 60vw;
     margin: 20px;
     padding: 20px;
@@ -31,7 +31,7 @@
 
 .signup-button {
     width: 10vw;
-    min-height: 2.5vh;
+    min-height: 3.5vh;
     border-radius: 5px;
     text-align: center;
     vertical-align: middle;

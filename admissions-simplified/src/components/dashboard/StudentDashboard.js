@@ -150,7 +150,7 @@ class StudentDashboard extends React.Component {
                             <TableRow>
                                 <TableCell>{data.university || 'none'}</TableCell>
                                 <TableCell align="right">{data.title || 'none'}</TableCell>
-                                <TableCell align="right">{data.registrar || 'none'}</TableCell>
+                                <TableCell align="right">{data.assignedHS || 'none'}</TableCell>
                                 <TableCell align="right">{data.date || 'none'}</TableCell>
                                 <TableCell align="right">
                                     {!data.status 
