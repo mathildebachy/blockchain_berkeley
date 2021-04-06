@@ -28,7 +28,6 @@ const SignUp = () => {
   const [isStudent, setIsStudent] = useState(false);
   const [registrarList, setRegistrarList] = useState([]);
 
-  
   useEffect(() => {
     getAllRegistrar().then(res => {
       setRegistrarList(res)

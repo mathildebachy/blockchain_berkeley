@@ -17,10 +17,19 @@ const Header = () => {
       <div className="container header_button">
           <p>How it works</p>
       </div>
-
-      <Link to='/student-dashboard' className='container header_button link'>
-        <p>Dashboard</p>
-      </Link>
+      {!user.userType 
+        ? <div></div> 
+        : (user.userType === "student"
+          ? 
+          <Link to='/student-dashboard' className='container header_button link'>
+            <p>Dashboard</p>
+          </Link>
+          :
+          <Link to='/registrar' className='container header_button link'>
+            <p>Dashboard</p>
+          </Link>
+          )
+      }
 
       <Link to='/profile' className='container header_button link'>
         <p>My profile</p>

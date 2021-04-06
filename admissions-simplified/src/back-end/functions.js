@@ -45,3 +45,13 @@ export const getRegistrarId = async (highschool) => {
     data.forEach(doc => result.push(doc.data()));
     return result;
 }
+
+export const getAllRequestFromRegistar = async (registrar) => {
+    const requestsRef = db.collection('requests');
+    const query = requestsRef.where('assignedHS', '==', registrar);
+    const data = await query.get()
+    if (data.empty) return null;
+    let result = []
+    data.forEach(doc => result.push(doc.data()));
+    return result;
+}

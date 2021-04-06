@@ -1,20 +1,27 @@
 import React from 'react';
 import './Student_request.css';
+import { UserContext } from '../providers/UserProvider'
 
 class Student_request extends React.Component {
+  static contextType = UserContext;
+
   constructor(props) {
     super(props);
     this.state = {
-      first_name: '',
-      last_name: '',
-      date_of_birth: '',
       doc_type: '',
       semester: '',
       transcript_year: '',
       isTranscript: false,
+      user: {},
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({user: this.context})
+    if (!this.context) this.props.history.push('/sign-in')
+    else if (!this.context.userType || this.context.userType !== "student") this.props.history.push('/')
   }
 
   handleChange(event) {
@@ -35,7 +42,6 @@ class Student_request extends React.Component {
 
   handleSubmit(event) {
     // Connection avec la DB
-    console.log('submited with '+this.state.first_name +this.state.transcript_year+this.state.semester);
     
     // Reset the fields of this.state
     for (const key of Object.keys(this.state)) {
@@ -52,7 +58,7 @@ class Student_request extends React.Component {
         <div className="student_request">
           <div class="border">
             <h1>
-              Student request form
+              Student request form { this.state.user.displayName || ''}
             </h1>
             <form onSubmit={this.handleSubmit}>
               <label >
