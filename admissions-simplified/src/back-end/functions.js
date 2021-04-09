@@ -4,7 +4,7 @@ export const fectchStudentRequest = async (studentId) => {
     const response = db.collection('requests');
     const query = response.where("student", "==", studentId)
     const data = await query.get();
-    if (data.empty) return null;
+    if (data.empty) return [];
     let result = []
     data.forEach(doc => result.push(doc.data()));
     return result;
