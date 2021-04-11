@@ -44,7 +44,7 @@ const smartContractJSONfile = require('./smartContract/smartContractJSON.json');
 import {smartContractStorageMLSON} from './smartContract/smartContractStorage.js'
 
 // Useful functions
-const contractAbstraction = async (smartContractStorageMLSON) => {
+const contractAbstractionOrigination = async (smartContractStorageMLSON) => {
   const originationOp = await Tezos.contract
   .originate({
       code: smartContractJSONfile,
@@ -56,6 +56,11 @@ const contractAbstraction = async (smartContractStorageMLSON) => {
   return contract;
 };
 
+const getContract = async (contractAddress) => {
+  const contract = await Tezos.contract.at(contractAddress);
+  return contract
+};
+
 const getContractData = async (contractAddress) => {
   const contract = await Tezos.contract.at(contractAddress);
   const storage = await contract.storage();
@@ -64,22 +69,43 @@ const getContractData = async (contractAddress) => {
 
 const updateContractStatus = async (contract,status) => {
   const updateOp = await contract.methods.update_status(status).send();
-  console.log(`Awaiting for ${updateOp.hash} to be confirmed...`);
   const updateOpConfirmation = await updateOp.confirmation(3);
-  // const updateOpConfirmationHash = await updateOpConfirmation.hash;
-  console.log(`Operation injected!`);
   const storageNew = await contract.storage(); 
   return storageNew
 };
 
-const contract = await contractAbstraction(smartContractStorageMLSON);
-const contractData = await getContractData(contract.address);
+const addContractDestination = async (contract,destination) => {
+  const updateOp = await contract.methods.add_destination(destination).send();
+  const updateOpConfirmation = await updateOp.confirmation(3);
+  const storageNew = await contract.storage(); 
+  return storageNew
+};
 
-console.log('\nThe contract address is: %s',contract.address);
-console.log('\nData inside the contract:');
-console.log(contractData);
-console.log('\nThe doc_status is: %s', contractData.doc_status);
+// destinations is a list
+const updateContractDestinations = async (contract,destinations) => {
+  const updateOp = await contract.methods.update_destination(destinations).send();
+  const updateOpConfirmation = await updateOp.confirmation(3);
+  const storageNew = await contract.storage(); 
+  return storageNew
+};
 
-console.log('\nUpdating the contract status...');
-const updatedContractData = await updateContractStatus(contract,'Gilou le prout');
-console.log('\nThe doc_status has been updated to: %s \n', updatedContractData.doc_status);
+const updateContractDescription = async (contract,description) => {
+  const updateOp = await contract.methods.update_description(description).send();
+  const updateOpConfirmation = await updateOp.confirmation(3);
+  const storageNew = await contract.storage(); 
+  return storageNew
+};
+
+// const contract = await contractAbstractionOrigination(smartContractStorageMLSON);
+// // const contract = await getContract("KT1QAzgCEK2sjHoMyw5gJNcsBkkMV97u6cBJ")
+// const contractData = await getContractData(contract.address);
+// // const contractData = await getContractData("KT1QAzgCEK2sjHoMyw5gJNcsBkkMV97u6cBJ");
+
+// console.log('\nThe contract address is: %s',contract.address);
+// console.log('\nData inside the contract:');
+// console.log(contractData);
+// // console.log('\nThe doc_status is: %s', contractData.doc_status);
+
+// console.log('\nUpdating...');
+// const updatedContractData = await updateContractDestinations(contract,['Test test']);
+// console.log(updatedContractData);
