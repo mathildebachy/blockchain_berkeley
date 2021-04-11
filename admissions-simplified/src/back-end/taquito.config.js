@@ -2,10 +2,11 @@ import { importKey, InMemorySigner } from '@taquito/signer';
 import { TezosToolkit } from '@taquito/taquito';
 import { createRequire } from 'module';
 import { smartContractStorageMLSON } from './smartContract/smartContractStorage.js'
+
+const require = createRequire(import.meta.url);
 export const smartContractJSONfile = require('./smartContract/smartContractJSON.json');
 
 const Tezos = new TezosToolkit('https://edonet.smartpy.io/');
-const require = createRequire(import.meta.url);
 
 // Initiate a signer to access the API
 const FAUCET_KEY = {
