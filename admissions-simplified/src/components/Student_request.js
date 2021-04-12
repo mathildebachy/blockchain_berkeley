@@ -2,6 +2,9 @@ import React from 'react';
 import './Student_request.css';
 import { UserContext } from '../providers/UserProvider'
 
+import { getAllUniversities, createContractInDB } from '../back-end/functions'
+import { contractAbstractionOrigination } from '../back-end/taquito.config'
+
 class Student_request extends React.Component {
   static contextType = UserContext;
 
@@ -10,18 +13,25 @@ class Student_request extends React.Component {
     this.state = {
       doc_type: '',
       semester: '',
+      description: '',
       transcript_year: '',
       isTranscript: false,
       user: {},
+      sendTo: [""],
+      numberToSendTo: 1,
+      universityList: [],
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.setState({user: this.context})
     if (!this.context) this.props.history.push('/sign-in')
     else if (!this.context.userType || this.context.userType !== "student") this.props.history.push('/')
+
+    const universities = await getAllUniversities();
+    this.setState({universityList: universities})
   }
 
   handleChange(event) {
@@ -37,18 +47,44 @@ class Student_request extends React.Component {
         this.setState({transcript_year: ''})
       }
     } 
-    this.setState({[event.target.name]: event.target.value})
+    if (event.target.name !== "sendTo") this.setState({[event.target.name]: event.target.value})
+    
+    else {
+      if (event.target.value !== "default") {
+        if (event.target.id == this.state.sendTo.length-1) {
+          this.setState({sendTo: [...this.state.sendTo, event.target.value]})
+        }
+        else {
+          let currList = this.state.sendTo;
+          currList[parseInt(event.target.id)+1] = event.target.value
+          this.setState({sendTo: currList})
+        }
+        console.log(this.state.sendTo)
+      }
+    }
   }
 
-  handleSubmit(event) {
-    // Connection avec la DB
-    
+  async handleSubmit(event) {
+    let contractParams = {
+      date_of_birth: this.state.user.date_of_birth || "",
+      doc_description: this.state.description,
+      doc_status: "pending",
+      doc_type: this.state.doc_type,
+      graduation_year: this.state.transcript_year,
+      send_to: this.state.sendTo.slice(1),
+      student_first_name: this.state.user.first_name || "",
+      student_last_name: this.state.user.last_name || "",
+      student_school_name: this.state.user.assignedHS || "",
+    } 
+    console.log(contractParams)
+    const contract = await contractAbstractionOrigination()
+    console.log(contract.adress)
+    // createContractInDB()
     // Reset the fields of this.state
-    for (const key of Object.keys(this.state)) {
-      this.setState({[key]: ''})
-    }
-    this.setState({isTranscript: false})
-
+    // for (const key of Object.keys(this.state)) {
+    //   this.setState({[key]: ''})
+    // }
+    // this.setState({isTranscript: false})
     event.preventDefault();
   }
 
@@ -56,29 +92,14 @@ class Student_request extends React.Component {
 
       return (
         <div className="student_request">
-          <div class="border">
+          <div className="border">
             <h1>
               Student request form { this.state.user.displayName || ''}
             </h1>
             <form onSubmit={this.handleSubmit}>
               <label >
-                First Name:
-                <input type="text" name="first_name" class="form_containter" value={this.state.first_name} onChange={this.handleChange} />
-              </label>
-
-              <label >
-                Last Name:
-                <input type="text" name="last_name" class="form_containter" value={this.state.last_name} onChange={this.handleChange} />
-              </label>
-
-              <label >
-                Date of birth:
-                <input type="date" name="date_of_birth" class="form_containter" value={this.state.date_of_birth} onChange={this.handleChange} />
-              </label>
-
-              <label >
                 Document to certify:
-                <select value={this.state.doc_type} name="doc_type" class="form_containter" onChange={this.handleChange}>
+                <select value={this.state.doc_type} name="doc_type" Name="form_containter" onChange={this.handleChange}>
                     <option value="degree">Degree</option>
                     <option value="transcript">Transcript</option>
                     <option value="certification">Certification</option>
@@ -86,20 +107,48 @@ class Student_request extends React.Component {
               </label>
               {this.state.isTranscript &&
               <div>
-                <label>
+                {/* <label>
                   Season:
                   <select class="form_containter" value={this.state.semester} name="semester" onChange={this.handleChange}>
                     <option value="fall ">Fall</option>
                     <option value="spring">Spring</option>
                   </select>
-                </label>
+                </label> */}
                 <label>
-                  Year:
-                  <input class="form_containter" type="text" name="transcript_year" value={this.state.transcript_year} onChange={this.handleChange} />
+                  Graduation Year:
+                  <input className="form_containter" type="text" name="transcript_year" value={this.state.transcript_year} onChange={this.handleChange} />
                 </label>
               </div>
               }
-              <input type="submit" value="Submit" class="submit"/>
+              <label>
+                Description (optional):
+                <input type="text" name="description" className="form_containter" value={this.state.description} onChange={this.handleChange} />
+              </label>
+              {this.state.sendTo.map((university, index) => (
+              <div className="margin">
+                  <label htmlfor="sendTo" classname="block">
+                    Send to:
+                  </label>
+                  <select id={index} value={this.sendTo} name="sendTo" onChange={this.handleChange}>
+                    <option value="default">- Select -</option>
+                    {this.state.universityList.map(university => (
+                      <option value={university.displayName}>{university.displayName}</option>
+                    ))}
+                  </select>
+                </div>
+              ))}
+              {/* <div className="margin">
+                  <label htmlfor="sendTo" classname="block">
+                    Send to:
+                  </label>
+                  <select value={this.sendTo} name="sendTo" onChange={this.handleChange}>
+                    <option value="default">- Select -</option>
+                    {this.state.universityList.map(university => (
+                      <option value={university.displayName}>{university.displayName}</option>
+                    ))}
+                  </select>
+                </div> */}
+              <input type="submit" value="Submit" className="submit"/>
             </form>
           </div>
         </div>

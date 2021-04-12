@@ -1,6 +1,6 @@
-import Tezos from './taquito.config'
-import smartContractJSONfile from './taquito.config'
-import smartContractStorageMLSON from './smartContract/smartContractStorage.js'
+import { Tezos } from './taquito.config'
+import { smartContractStorageMLSON } from './smartContract/smartContractStorage.js'
+import { smartContractJSONfile } from './smartContract/smartContractJSON'
 
 // Useful functions
 const params = {
@@ -19,7 +19,7 @@ const initContractStorageMLSON = (params) => {
     return `(Pair (Pair (Pair ${params.date_of_birth} ${params.doc_description}) (Pair ${params.doc_status} ${params.doc_type})) (Pair (Pair ${params.graduation_year} {${params.send_to}}) (Pair ${params.student_first_name} (Pair ${params.student_last_name} ${params.student_school_name}))))`
 }
 
-export const contractAbstractionOrigination = async (smartContractStorageMLSON) => {
+export const contractAbstractionOrigination = async (params) => {
   const originationOp = await Tezos.contract
   .originate({
       code: smartContractJSONfile,
