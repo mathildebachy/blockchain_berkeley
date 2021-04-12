@@ -17,6 +17,8 @@ import ProfilePage from './components/user/ProfilePage'
 import PasswordReset from './components/user/PasswordReset';
 import StudentDashboard from './components/dashboard/StudentDashboard'
 import RegistrarDashboard from './components/dashboard/RegistrarDashboard'
+import UpdateUserInfo from './components/user/UpdateUserInfo'
+import StudentReq2 from './components/StudentReq2'
 
 function App() {
   return(
@@ -35,6 +37,8 @@ function App() {
                   <Route exact path="/profile" component={ProfilePage} />
                   <Route exact path="/password-reset" component={PasswordReset}/>
                   <Route exact path="/student-dashboard" component={StudentDashboard}/>
+                  <Route exact path="/update-info" component={UpdateUserInfo}/>
+                  <Route exact path="/test" component={StudentReq2}/>
 
                 </Switch>
               <Footer />

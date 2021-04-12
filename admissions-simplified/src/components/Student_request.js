@@ -2,8 +2,11 @@ import React from 'react';
 import './Student_request.css';
 import { UserContext } from '../providers/UserProvider'
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+import CheckIcon from '@material-ui/icons/Check';
+
 import { getAllUniversities, createContractInDB } from '../back-end/functions'
-import { contractAbstractionOrigination } from '../back-end/taquito.config'
+import { contractAbstractionOrigination } from '../back-end/taquito_functions'
 
 class Student_request extends React.Component {
   static contextType = UserContext;
@@ -20,6 +23,8 @@ class Student_request extends React.Component {
       sendTo: [""],
       numberToSendTo: 1,
       universityList: [],
+      isLoading: false,
+      isFinished: false,
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -32,6 +37,21 @@ class Student_request extends React.Component {
 
     const universities = await getAllUniversities();
     this.setState({universityList: universities})
+  }
+  
+  parsingParameters = (contractParams) => {
+    let parsedParams = contractParams;
+    for (const param in contractParams) {
+      const value = contractParams[param];
+      if (typeof value === "string") {
+        parsedParams[param] = '"'+parsedParams[param]+'"'
+      }
+      else {
+        parsedParams[param] = parsedParams[param].map(elem => '"'+elem+'"');
+      }
+    }
+    console.log(parsedParams)
+    return parsedParams
   }
 
   handleChange(event) {
@@ -47,8 +67,7 @@ class Student_request extends React.Component {
         this.setState({transcript_year: ''})
       }
     } 
-    if (event.target.name !== "sendTo") this.setState({[event.target.name]: event.target.value})
-    
+    if (event.target.name !== "sendTo") this.setState({[event.target.name]: event.target.value})    
     else {
       if (event.target.value !== "default") {
         if (event.target.id == this.state.sendTo.length-1) {
@@ -59,12 +78,12 @@ class Student_request extends React.Component {
           currList[parseInt(event.target.id)+1] = event.target.value
           this.setState({sendTo: currList})
         }
-        console.log(this.state.sendTo)
       }
     }
   }
 
   async handleSubmit(event) {
+    event.preventDefault();
     let contractParams = {
       date_of_birth: this.state.user.date_of_birth || "",
       doc_description: this.state.description,
@@ -76,16 +95,20 @@ class Student_request extends React.Component {
       student_last_name: this.state.user.last_name || "",
       student_school_name: this.state.user.assignedHS || "",
     } 
-    console.log(contractParams)
-    const contract = await contractAbstractionOrigination()
-    console.log(contract.adress)
-    // createContractInDB()
+    contractParams = this.parsingParameters(contractParams);
+    this.setState({isLoading: true});
+    const contract = await contractAbstractionOrigination(contractParams)
+    this.setState({isLoading: false});
+    this.setState({isFinished: true});
+    const contractId = await createContractInDB(this.state.user.uid, this.state.user.assignedHS, contractParams.send_to, contract.address)
+    console.log(contractId)
+    this.props.history.push('/')
+
     // Reset the fields of this.state
     // for (const key of Object.keys(this.state)) {
     //   this.setState({[key]: ''})
     // }
     // this.setState({isTranscript: false})
-    event.preventDefault();
   }
 
     render() {
@@ -99,7 +122,7 @@ class Student_request extends React.Component {
             <form onSubmit={this.handleSubmit}>
               <label >
                 Document to certify:
-                <select value={this.state.doc_type} name="doc_type" Name="form_containter" onChange={this.handleChange}>
+                <select value={this.state.doc_type} name="doc_type" className="form_containter" onChange={this.handleChange}>
                     <option value="degree">Degree</option>
                     <option value="transcript">Transcript</option>
                     <option value="certification">Certification</option>
@@ -149,6 +172,12 @@ class Student_request extends React.Component {
                   </select>
                 </div> */}
               <input type="submit" value="Submit" className="submit"/>
+              {this.state.isLoading
+              ? <CircularProgress />
+              : (this.state.isFinished
+                ? <CheckIcon/>
+                :<div></div>)
+              }
             </form>
           </div>
         </div>
