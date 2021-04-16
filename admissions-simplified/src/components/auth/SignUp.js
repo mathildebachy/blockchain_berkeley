@@ -121,7 +121,7 @@ const SignUp = () => {
             onChange={event => onChangeHandler(event)}
           />
           <div className="margin">
-            <p>I'm a:</p>
+            <p>I am a:</p>
             <label>
               <input
               type="radio"

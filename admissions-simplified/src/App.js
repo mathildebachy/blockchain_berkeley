@@ -8,15 +8,19 @@ import firebase from "firebase/app";
 
 import UserProvider from './providers/UserProvider'
 import Home from './components/Home';
-import Header from './components/Header';
+import Header from './components/HeaderV1';
 import Footer from './components/Footer';
 import Student_request from "./components/Student_request";
 import Signup from './components/auth/SignUp'
 import SignIn from './components/auth/SignIn';
 import ProfilePage from './components/user/ProfilePage'
 import PasswordReset from './components/user/PasswordReset';
-import StudentDashboard from './components/dashboard/StudentDashboard'
-import RegistrarDashboard from './components/dashboard/RegistrarDashboard'
+import StudentDashboard from './components/dashboard/StudentDashboard';
+import RegistrarDashboard from './components/dashboard/RegistrarDashboard';
+import OurValues from './components/descriptions/OurValues';
+import HowItWorks from './components/descriptions/HowItWorks';
+import OurTeam from './components/descriptions/OurTeam';
+
 
 function App() {
   return(
@@ -35,6 +39,10 @@ function App() {
                   <Route exact path="/profile" component={ProfilePage} />
                   <Route exact path="/password-reset" component={PasswordReset}/>
                   <Route exact path="/student-dashboard" component={StudentDashboard}/>
+                  <Route exact path="/our-values" component={OurValues}/>
+                  <Route exact path="/how-it-works" component={HowItWorks}/>
+                  <Route exact path="/meet-the-team" component={OurTeam}/>
+                  <Route exact path="/contact-us" component={OurTeam}/>
 
                 </Switch>
               <Footer />

@@ -10,18 +10,18 @@ class Home extends React.Component {
         <div className="home">
           <div>
             <h1>Transcripts and Degrees on Blockchain</h1>
-            <p className="text">Forgery-proof and 100% digital certificates: more than 100 institutions and 15 countries trust in us to issue blockchain digital credentials</p>
+            <h3>Forgery-proof and 100% digital certificates: more than 100 institutions and 15 countries trust in us to issue blockchain digital credentials</h3>
           </div>
 
           <div class="home_buttons">
             <Link to='/student-request'>
               <button class="home_button">
-                  <p>I'm a student</p>
+                  <p>Get Started Now</p>
               </button>
             </Link>
-            <Link to='/registrar' className='text-link'>
+            <Link to='/meet-the-team' className='text-link'>
               <button class="home_button">
-                <p>I'm a registrar</p>
+                <p>Meet the team</p>
               </button>
             </Link>
           </div>

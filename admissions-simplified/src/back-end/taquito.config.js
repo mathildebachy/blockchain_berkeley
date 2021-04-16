@@ -2,7 +2,7 @@ import { importKey, InMemorySigner } from '@taquito/signer';
 import { TezosToolkit } from '@taquito/taquito';
 import { createRequire } from 'module';
 import { smartContractStorageMLSON } from './smartContract/smartContractStorage.js'
-import { smartContractJSONfile } from './smartContract/smartContractJSON'
+import { smartContractJSONfile } from './smartContract/smartContractJSON.js'
 
 // const require = createRequire(import.meta.url);
 // export const smartContractJSONfile = require('./smartContract/smartContractJSON.json');
@@ -12,28 +12,28 @@ const Tezos = new TezosToolkit('https://edonet.smartpy.io/');
 // Initiate a signer to access the API
 const FAUCET_KEY = {
   "mnemonic": [
-    "shock",
-    "neutral",
-    "barely",
-    "seven",
-    "juice",
-    "depend",
-    "vote",
-    "judge",
+    "left",
+    "gallery",
+    "one",
     "wink",
-    "antenna",
-    "machine",
-    "into",
-    "mother",
-    "collect",
-    "bamboo"
+    "paper",
+    "carpet",
+    "roof",
+    "cup",
+    "bean",
+    "infant",
+    "puppy",
+    "fitness",
+    "analyst",
+    "urban",
+    "easy"
   ],
-  "secret": "33e364101b8caf998d5a4d627eac8130a85fd320",
-  "amount": "15098525523",
-  "pkh": "tz1dpMuoLM3uQWcefWwgDwsfhkKudQsgHsNk",
-  "password": "5uOS4AzCZh",
-  "email": "caojzivk.bdrbrxcc@tezos.example.org"
-};
+  "secret": "448fe5c1993c5a62dac7f4720cb2472d1f4804f5",
+  "amount": "29326798751",
+  "pkh": "tz1PDJpDeu8ofY9X5JHxjYZ6kczwEdgPzAHj",
+  "password": "17b5EgjWZH",
+  "email": "jtugbkcj.ifjfejqv@tezos.example.org"
+}
 
 importKey(
   Tezos,
@@ -72,4 +72,6 @@ export const contractAbstractionOrigination = () => {
   console.log("test", Tezos)
 }
 
+// const test = await contractAbstractionOrigination()
+// console.log(test)
 export { Tezos };

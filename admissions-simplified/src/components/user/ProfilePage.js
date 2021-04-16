@@ -31,7 +31,8 @@ const ProfilePage = () => {
              `url(${photoURL || 'https://res.cloudinary.com/dqcsk8rsc/image/upload/v1577268053/avatar-1-bitmoji_upgwhc.png'})  no-repeat center center`,
             backgroundSize: "cover",
             height: "200px",
-            width: "200px"
+            width: "200px",
+            alignSelf: "center"
           }}
         ></div>
         <div>

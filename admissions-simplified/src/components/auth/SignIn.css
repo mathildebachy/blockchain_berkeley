@@ -1,8 +1,8 @@
 .signin-wrapper {
 
-    background-color:#e9e2c9;
+    background-color:white;
     font-family: Arial, Helvetica, sans-serif;
-    color: #292c35;
+    color: rgb(35,47,62);
     
     background-image: url("../../assets/background_style.png");
     background-size: 40%;
@@ -16,12 +16,15 @@
     height: 72vh;
 }
 
+.signin-wrapper h1{
+    padding: 4vh;
+}
+
 .sign-in-card{
-    border: solid #292c35 1px;
+    border: solid rgb(35,47,62) 1px;
     border-radius: 5px;
-    height: 50vh;
-    width: 60vw;
-    margin: 20px;
+    width: 40vw;
+    margin-bottom: 5vh;
     padding: 20px;
 
     display: flex;
@@ -35,8 +38,8 @@
     border-radius: 5px;
     text-align: center;
     vertical-align: middle;
-    color: #dcae52;
-    background-color: #292c35;
+    color: white;
+    background-color: rgb(35,47,62);
 }
 
 .margin {
@@ -44,11 +47,12 @@
 }
 
 .signin-button:hover {
-    color: #292c35;
-    background-color: #dcae52;
+    color: rgb(35,47,62);
+    background-color: rgb(255,153,0);
     cursor: pointer;
 }
 
 .additional-info {
-    align-self: flex-start;
+    align-self: center;
+    text-align: center
 }
