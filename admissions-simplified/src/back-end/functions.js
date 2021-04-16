@@ -10,8 +10,14 @@ export const fectchStudentRequest = async (studentId) => {
     return result;
 }
 
-export const writeRequest = async (data) => {
+export const createContractInDB = async (studentId, registrarId, universityList, contractAdress) => {
     const requestsRef = db.collection('requests');
+    const data = {
+        studentId: studentId,
+        registrarId: registrarId,
+        universityList: universityList,
+        contractAdress: contractAdress,
+    }
     const res = await requestsRef.add(data);
     return res.id;
 }

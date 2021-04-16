@@ -20,7 +20,8 @@ import RegistrarDashboard from './components/dashboard/RegistrarDashboard';
 import OurValues from './components/descriptions/OurValues';
 import HowItWorks from './components/descriptions/HowItWorks';
 import OurTeam from './components/descriptions/OurTeam';
-
+import UpdateUserInfo from './components/user/UpdateUserInfo';
+import StudentReq2 from './components/StudentReq2';
 
 function App() {
   return(
@@ -43,6 +44,8 @@ function App() {
                   <Route exact path="/how-it-works" component={HowItWorks}/>
                   <Route exact path="/meet-the-team" component={OurTeam}/>
                   <Route exact path="/contact-us" component={OurTeam}/>
+                  <Route exact path="/update-info" component={UpdateUserInfo}/>
+                  <Route exact path="/test" component={StudentReq2}/>
 
                 </Switch>
               <Footer />

@@ -2,11 +2,34 @@ import React, { useContext } from "react";
 import { auth } from "../../back-end/firebase";
 import { UserContext } from '../../providers/UserProvider'
 import './ProfilePage.css'
-import { useHistory } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
+
+import { btn_theme } from '../../styling/paletteTheme'
+
+import { makeStyles , ThemeProvider } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+
+const useStyles = makeStyles({
+  root: {
+    maxWidth: 375,
+    height:500,
+    backgroundColor: "#e8cb8f",
+  },
+  media: {
+    height: 140,
+  },
+});
 
 
 const ProfilePage = () => {
-    // useContext hook to get the current value of UserContext
+  const classes = useStyles();
+
   const user = useContext(UserContext);
   const history = useHistory();
   
@@ -23,25 +46,41 @@ const ProfilePage = () => {
     history.push("/")
   }
   return (
-    <div className = "global-wrapper">
-      <div className="profile-card">
-        <div
-          style={{
-            background:
-             `url(${photoURL || 'https://res.cloudinary.com/dqcsk8rsc/image/upload/v1577268053/avatar-1-bitmoji_upgwhc.png'})  no-repeat center center`,
-            backgroundSize: "cover",
-            height: "200px",
-            width: "200px",
-            alignSelf: "center"
-          }}
-        ></div>
-        <div>
-          <h2>{displayName}</h2>
-          <p>Email: {email}</p>
-        </div>
+      <div className = "global-wrapper">
+        <ThemeProvider theme={btn_theme}>
+          <Card className={classes.root}>
+            <CardActionArea>
+              <CardMedia
+                className={classes.media}
+                image={photoURL || '../../assets/images/user/user_logo.webp'}
+                title="User Photo"
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="h2">
+                  {displayName}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p" >
+                  Email: {email}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+            <CardActions>
+              <Link to="/update-info" style={{ textDecoration: 'none' }}>
+                <Button size="medium" color="secondary">
+                  Update Info
+                </Button>
+              </Link>
+              <Button size="medium" color="secondary">
+                Reset Password
+              </Button>
+              <Button size="medium" color="primary" onClick={()=>signOut()}>
+                Sign Out
+              </Button>
+            </CardActions>
+          </Card>
+        </ThemeProvider>
+        
       </div>
-      <button className="signout-button" onClick={() => {signOut();}}>Sign out</button>
-    </div>
   ) 
 };
 export default ProfilePage;
