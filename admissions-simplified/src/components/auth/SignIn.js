@@ -14,7 +14,7 @@ const SignIn = () => {
 
     useEffect(() => {
       if (user) {
-        setredirect('/')
+        setredirect('/how-it-works')
       }
     }, [user]);
     if (redirect) {

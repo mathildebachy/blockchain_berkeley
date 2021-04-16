@@ -52,11 +52,6 @@ const initContractStorageMLSON = (params) => {
     return `(Pair (Pair (Pair ${params.date_of_birth} ${params.doc_description}) (Pair ${params.doc_status} ${params.doc_type})) (Pair (Pair ${params.graduation_year} {${params.send_to}}) (Pair ${params.student_first_name} (Pair ${params.student_last_name} ${params.student_school_name}))))`
 }
 
-<<<<<<< HEAD
-// const test = await contractAbstractionOrigination()
-// console.log(test)
-export { Tezos };
-=======
 export const contractAbstractionOrigination = async (parameters) => {
   const Tezos = await signerInitialization();
   const originationOp = await Tezos.contract
@@ -67,4 +62,3 @@ export const contractAbstractionOrigination = async (parameters) => {
   const contract = await originationOp.contract();
   return contract;
 };
->>>>>>> 7be010c8f4f66c9e48fc6b7a4e60cbbc1488ef09

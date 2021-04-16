@@ -413,6 +413,7 @@ body,
 /* Menu */
 .airwolf-navigation > ul > li {
   display: inline-block;
+  margin: 0vh 2vw;
 }
 
 /* Submenu */
@@ -469,7 +470,7 @@ body,
   background-color: rgb(35,47,62);
   position: relative;
   width: 100%;
-  height: 20vh;
+  min-height: 20vh;
   overflow: hidden;
 }
 .airwolf-header::after {
