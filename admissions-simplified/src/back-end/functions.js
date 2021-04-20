@@ -1,4 +1,4 @@
-import db from './firebase.config';
+import { db, storage } from './firebase.config';
 
 export const fectchStudentRequest = async (studentId) => {
     const response = db.collection('requests');
@@ -80,4 +80,30 @@ export const getRegistrarContractAdress = async (registrar_id) => {
     let result = []
     data.forEach(doc => result.push(doc.data().contractAdress));
     return result
+}
+
+export const uploadFileToContract = async (file, contractAddress) => {
+    const storageRef = storage.ref();
+    const fileRef = storageRef.child(file.name);
+    const uploadFile = await fileRef.put(file);
+    console.log(uploadFile);
+    const downloadUrl = await fileRef.getDownloadURL();
+    const requestsRef = db.collection('requests');
+    const query = requestsRef.where('contractAdress', '==', contractAddress);
+    const data = await query.get();
+    data.forEach(async doc => {
+        if (doc.data().files) await doc.ref.update({files: [...doc.data().files, {'name': file.name, 'downloadUrl': downloadUrl}]});
+        else await doc.ref.update({files: [{'name': file.name, 'downloadUrl': downloadUrl}]})
+    })
+    return "completed";
+}
+
+export const getAllFilesFromContractAddress = async (contractAddress) => {
+    const requestsRef = db.collection('requests');
+    const query = requestsRef.where('contractAdress', '==', contractAddress);
+    const data = await query.get();
+    let result = [];
+    data.forEach(doc => result.push(doc.data().files));
+    console.log(result[0])
+    return result[0];
 }
