@@ -1,5 +1,6 @@
-import React, { useContext } from 'react';
-import { fectchStudentRequest } from '../../back-end/functions'
+import React from 'react';
+import { fectchStudentRequest, getStudentContractAdresses } from '../../back-end/functions'
+import { getContractData } from '../../back-end/taquito_functions'
 import { UserContext } from '../../providers/UserProvider'
 
 import PropTypes from 'prop-types';
@@ -22,6 +23,7 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { green } from '@material-ui/core/colors';
 import { Tooltip } from '@material-ui/core';
+import { ContactsOutlined } from '@material-ui/icons';
 
 
 const useStyles1 = makeStyles((theme) => ({
@@ -102,7 +104,7 @@ class StudentDashboard extends React.Component {
         this.state = {
             data: [],
             page: 0,
-            rowsPerPage: 2,
+            rowsPerPage: 5,
             emptyRows: 5,
             user: {},
         }
@@ -111,15 +113,27 @@ class StudentDashboard extends React.Component {
 
     }
     fetchData = async (userId) => {
-        let data = await fectchStudentRequest('gilles');
-        this.setState({data: data})
-        this.setState({emptyRows: this.state.rowsPerPage - Math.min(this.state.rowsPerPage, data.length - this.state.page*this.state.rowsPerPage)})
+        let contractAdresses = await getStudentContractAdresses(userId)
+        let contractData = [];
+        for (const adress of contractAdresses) {
+          const data = await getContractData(adress);
+          contractData.push(data);
+        }
+        console.log("contractData", contractData);
+        console.log("adresses", contractAdresses);
+        this.setState(({data: contractData}))
+        // let data = await fectchStudentRequest('gilles');
+        // this.setState({data: data})
+        this.setState({emptyRows: this.state.rowsPerPage - Math.min(this.state.rowsPerPage, contractData.length - this.state.page*this.state.rowsPerPage)})
     }
     componentDidMount() {
         this.setState({user: this.context})
         if (!this.context) this.props.history.push('/sign-in')
         else if (!this.context.userType || this.context.userType !== "student") this.props.history.push('/')
-        else this.fetchData(this.context.uid);
+        else {
+          this.fetchData(this.context.uid);
+          console.log("user", this.context.uid, this.context.displayName);
+        }
     }
     handleChangeRowsPerPage(event) {
         this.setState({rowsPerPage: parseInt(event.target.value, 10)});
@@ -138,9 +152,9 @@ class StudentDashboard extends React.Component {
                     <TableHead>
                         <TableRow>
                             <TableCell>University</TableCell>
-                            <TableCell align="right">Title</TableCell>
+                            <TableCell align="right">Description</TableCell>
                             <TableCell align="right">Registrar</TableCell>
-                            <TableCell align="right">Date</TableCell>
+                            <TableCell align="right">Graduation Year</TableCell>
                             <TableCell align="right">Status</TableCell>
                         </TableRow>
                     </TableHead>
@@ -150,12 +164,12 @@ class StudentDashboard extends React.Component {
                         : this.state.data)
                         .map(data => (
                             <TableRow>
-                                <TableCell>{data.university || 'none'}</TableCell>
-                                <TableCell align="right">{data.title || 'none'}</TableCell>
-                                <TableCell align="right">{data.assignedHS || 'none'}</TableCell>
-                                <TableCell align="right">{data.date || 'none'}</TableCell>
+                                <TableCell>{data.send_to.join(", ") || 'none'}</TableCell>
+                                <TableCell align="right">{data.doc_description || 'none'}</TableCell>
+                                <TableCell align="right">{data.student_school_name || 'none'}</TableCell>
+                                <TableCell align="right">{data.graduation_year || 'none'}</TableCell>
                                 <TableCell align="right">
-                                    {!data.status 
+                                    {!data.doc_status 
                                     ? <Tooltip title="none">
                                             <FiberManualRecordIcon style={{color: 'black'}}/>
                                         </Tooltip>
@@ -184,7 +198,7 @@ class StudentDashboard extends React.Component {
                     <TableFooter>
                         <TableRow>
                             <TablePagination
-                            rowsPerPageOptions={[2, 10, 25, { label: 'All', value: -1 }]}
+                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                             colSpan={3}
                             count={this.state.data.length}
                             rowsPerPage={this.state.rowsPerPage}
