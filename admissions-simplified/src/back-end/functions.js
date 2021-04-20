@@ -72,12 +72,12 @@ export const getStudentContractAdresses = async (student_uid) => {
     return result;
 }
 
-export const getUserNameFromId = async (uid) => {
-    const requestsRef = db.collection('users');
-    const query = requestsRef.where("uid", "==", uid)
+export const getRegistrarContractAdress = async (registrar_id) => {
+    const requestsRef = db.collection('requests');
+    const query = requestsRef.where('registrarId', '==', registrar_id);
     const data = await query.get()
     if (data.empty) return null;
     let result = []
-    data.forEach(doc => result.push(doc.data()));
+    data.forEach(doc => result.push(doc.data().contractAdress));
     return result
 }

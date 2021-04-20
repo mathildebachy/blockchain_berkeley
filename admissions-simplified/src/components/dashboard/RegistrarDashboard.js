@@ -1,5 +1,6 @@
 import React from 'react';
-import { getAllRequestFromRegistar } from '../../back-end/functions'
+import { getAllRequestFromRegistar, getRegistrarContractAdress } from '../../back-end/functions'
+import { getContractData } from '../../back-end/taquito_functions'
 import { UserContext } from '../../providers/UserProvider'
 import { TablePaginationActions} from './tablePagination'
 
@@ -17,6 +18,7 @@ import TableFooter from '@material-ui/core/TableFooter';
 import { green } from '@material-ui/core/colors';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { Tooltip } from '@material-ui/core';
+import { ContactsOutlined } from '@material-ui/icons';
 
 
 const useStyles = {
@@ -31,7 +33,7 @@ class RegistrarDashboard extends React.Component {
         this.state = {
             data: [],
             page: 0,
-            rowsPerPage: 2,
+            rowsPerPage: 5,
             emptyRows: 5,
             user: {},
         }
@@ -41,17 +43,27 @@ class RegistrarDashboard extends React.Component {
     }
     fetchData = async (userId) => {
         // TO DO Hook the registrar name
-        let data = await getAllRequestFromRegistar('Lycee La Nativite');
-        if (data) {
-            this.setState({data: data})
-            this.setState({emptyRows: this.state.rowsPerPage - Math.min(this.state.rowsPerPage, data.length - this.state.page*this.state.rowsPerPage)})
+        let contractAdresses = await getRegistrarContractAdress(userId)
+        let contractData = [];
+        for (const adress of contractAdresses) {
+          const data = await getContractData(adress);
+          contractData.push(data);
         }
+        console.log("contractData", contractData);
+        console.log("adresses", contractAdresses);
+        this.setState(({data: contractData}))
+        this.setState({emptyRows: this.state.rowsPerPage - Math.min(this.state.rowsPerPage, contractData.length - this.state.page*this.state.rowsPerPage)})
+        // let data = await getAllRequestFromRegistar('Lycee La Nativite');
+        // if (data) {
+        //     this.setState({data: data})
+        //     this.setState({emptyRows: this.state.rowsPerPage - Math.min(this.state.rowsPerPage, data.length - this.state.page*this.state.rowsPerPage)})
+        // }
     }
     componentDidMount() {
         this.setState({user: this.context})
         if (!this.context) this.props.history.push('/sign-in')
         else if (!this.context.userType || this.context.userType !== "highschool") this.props.history.push('/')
-        else this.fetchData(this.context.uid);
+        else this.fetchData(this.context.displayName);
     }
     
     handleChangeRowsPerPage(event) {
@@ -70,10 +82,9 @@ class RegistrarDashboard extends React.Component {
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>University</TableCell>
-                            <TableCell align="right">Title</TableCell>
-                            <TableCell align="right">Registrar</TableCell>
-                            <TableCell align="right">Date</TableCell>
+                            <TableCell>Student Name</TableCell>
+                            <TableCell align="right">Document type</TableCell>
+                            <TableCell align="right">Year</TableCell>
                             <TableCell align="right">Status</TableCell>
                         </TableRow>
                     </TableHead>
@@ -83,12 +94,11 @@ class RegistrarDashboard extends React.Component {
                         : this.state.data)
                         .map(data => (
                             <TableRow>
-                                <TableCell>{data.university || 'none'}</TableCell>
-                                <TableCell align="right">{data.title || 'none'}</TableCell>
-                                <TableCell align="right">{data.assignedHS || 'none'}</TableCell>
-                                <TableCell align="right">{data.date || 'none'}</TableCell>
+                                <TableCell>{data.student_last_name + ", "+ data.student_first_name || 'none'}</TableCell>
+                                <TableCell align="right">{data.doc_type || 'none'}</TableCell>
+                                <TableCell align="right">{data.graduation_year || 'none'}</TableCell>
                                 <TableCell align="right">
-                                    {!data.status 
+                                    {!data.doc_status 
                                     ? <Tooltip title="none">
                                             <FiberManualRecordIcon style={{color: 'black'}}/>
                                         </Tooltip>
@@ -117,7 +127,7 @@ class RegistrarDashboard extends React.Component {
                     <TableFooter>
                         <TableRow>
                             <TablePagination
-                            rowsPerPageOptions={[2, 10, 25, { label: 'All', value: -1 }]}
+                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                             colSpan={3}
                             count={this.state.data.length}
                             rowsPerPage={this.state.rowsPerPage}
