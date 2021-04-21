@@ -31,8 +31,10 @@ const Header = () => {
           : (user.userType === "student"
             ? 
             <li><Link to='/student-dashboard'>Dashboard</Link></li>
-            :
-            <li><Link to='/registrar'>Dashboard</Link></li>
+            :(user.userType === "university"
+              ? <li><Link to='/university-dashboard'>Dashboard</Link></li>
+              : <li><Link to='/registrar'>Dashboard</Link></li>
+            )
             )
         }
       <li><Link to='/profile'>My Profile</Link></li>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { getAllFilesFromContractAddress, getRegistrarContractAdress, uploadFileToContract } from '../../back-end/functions'
+import { getAllFilesFromContractAddress, getUniversityContractAdress } from '../../back-end/functions'
 import { getContractData, updateContractStatus, getContract } from '../../back-end/taquito_functions'
 import { UserContext } from '../../providers/UserProvider'
 
@@ -46,57 +46,6 @@ const useStyles = {
   },
 };
 
-function UploadDocument(props) {
-  const [open, setOpen] = React.useState(false);
-  const [files, setFiles] = React.useState([]);
-
-  const contractAddress = props.contracAddress
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleChange = (files) => {
-    setFiles(files);
-  }
-
-  const uploadFiles = async () => {
-      files.forEach(async file => {
-          const uploadedFile = await uploadFileToContract(file, contractAddress);
-      });
-      setOpen(false);
-  }
-
-  return (
-    <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Upload File
-      </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Upload files</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Contract address: {props.contracAddress}
-          </DialogContentText>
-          <DropzoneArea onChange={handleChange}></DropzoneArea>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={uploadFiles} color="primary">
-            Upload 
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-}
-
 const useRowStyles = makeStyles({
   root: {
     '& > *': {
@@ -110,13 +59,6 @@ function Row(props) {
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
 
-    const sendToUniversity = async () => {
-        const contract = await getContract(data.address);
-        console.log("contract", contract)
-        const newStorage = await updateContractStatus(contract, "approved");
-        console.log("new storage", newStorage)
-    }
-
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
@@ -128,34 +70,7 @@ function Row(props) {
                 <TableCell>{data.student_last_name + ", "+ data.student_first_name || 'none'}</TableCell>
                 <TableCell align="right">{data.doc_type || 'none'}</TableCell>
                 <TableCell align="right">{data.graduation_year || 'none'}</TableCell>
-                <TableCell align="right">
-                    {!data.doc_status 
-                    ? <Tooltip title="none">
-                            <FiberManualRecordIcon style={{color: 'black'}}/>
-                        </Tooltip>
-                    : (data.doc_status==="approved"
-                        ? <Tooltip title="approved">
-                                <FiberManualRecordIcon style={{color: green[500]}}/>
-                            </Tooltip>
-                        : (data.doc_status==="rejected")
-                            ? <Tooltip title="rejected">
-                                <FiberManualRecordIcon style={{color: 'red'}}/>
-                            </Tooltip>
-                            : <Tooltip title="pending">
-                                <FiberManualRecordIcon style={{color: 'orange'}}/>
-                            </Tooltip>
-                    )
-                }
-                </TableCell>
-                {data.doc_status==="pending"
-                ? 
-                <>
-                    <TableCell><UploadDocument contracAddress={data.address}></UploadDocument></TableCell>
-                    <TableCell><Button onClick={sendToUniversity}>Send to university</Button></TableCell>
-                </>
-                :<></>
-                }
-                {/* <TableCell><UploadDocument contracAddress={data.address}></UploadDocument></TableCell> */}
+                <TableCell align="right">{data.student_school_name || 'none'}</TableCell>
             </TableRow>
             {/* The following contains the dropdown with all the files associated with one contract */}
             <TableRow>
@@ -210,8 +125,7 @@ class RegistrarDashboard extends React.Component {
 
     }
     fetchData = async (userId) => {
-        // TO DO Hook the registrar name
-        let contractAdresses = await getRegistrarContractAdress(userId)
+        let contractAdresses = await getUniversityContractAdress(userId)
         let contractData = [];
         for (const address of contractAdresses) {
           const data = await getContractData(address);
@@ -222,16 +136,12 @@ class RegistrarDashboard extends React.Component {
         console.log("adresses", contractAdresses);
         this.setState(({data: contractData}))
         this.setState({emptyRows: this.state.rowsPerPage - Math.min(this.state.rowsPerPage, contractData.length - this.state.page*this.state.rowsPerPage)})
-        // let data = await getAllRequestFromRegistar('Lycee La Nativite');
-        // if (data) {
-        //     this.setState({data: data})
-        //     this.setState({emptyRows: this.state.rowsPerPage - Math.min(this.state.rowsPerPage, data.length - this.state.page*this.state.rowsPerPage)})
-        // }
     }
+
     componentDidMount() {
         this.setState({user: this.context})
         if (!this.context) this.props.history.push('/sign-in')
-        else if (!this.context.userType || this.context.userType !== "highschool") this.props.history.push('/')
+        else if (!this.context.userType || this.context.userType !== "university") this.props.history.push('/')
         else this.fetchData(this.context.displayName);
     }
     
@@ -255,42 +165,16 @@ class RegistrarDashboard extends React.Component {
                             <TableCell>Student Name</TableCell>
                             <TableCell align="right">Document type</TableCell>
                             <TableCell align="right">Year</TableCell>
-                            <TableCell align="right">Status</TableCell>
-                            <TableCell align="right"></TableCell>
+                            <TableCell align="right">Registrar</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {((this.state.rowsPerPage > 0)
                         ? this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page*this.state.rowsPerPage + this.state.rowsPerPage)
                         : this.state.data)
-                        .map(data => (
-                            // <TableRow>
-                            //     <TableCell>{data.student_last_name + ", "+ data.student_first_name || 'none'}</TableCell>
-                            //     <TableCell align="right">{data.doc_type || 'none'}</TableCell>
-                            //     <TableCell align="right">{data.graduation_year || 'none'}</TableCell>
-                            //     <TableCell align="right">
-                            //         {!data.doc_status 
-                            //         ? <Tooltip title="none">
-                            //                 <FiberManualRecordIcon style={{color: 'black'}}/>
-                            //             </Tooltip>
-                            //         : (data.status==="approved"
-                            //             ? <Tooltip title="approved">
-                            //                     <FiberManualRecordIcon style={{color: green[500]}}/>
-                            //                 </Tooltip>
-                            //             : (data.status==="rejected")
-                            //                 ? <Tooltip title="rejected">
-                            //                     <FiberManualRecordIcon style={{color: 'red'}}/>
-                            //                 </Tooltip>
-                            //                 : <Tooltip title="pending">
-                            //                     <FiberManualRecordIcon style={{color: 'orange'}}/>
-                            //                 </Tooltip>
-                            //         )
-                            //     }
-                            //     </TableCell>
-                            //     <TableCell><UploadDocument contracAddress={data.address}></UploadDocument></TableCell>
-                            // </TableRow>
-                            <Row data={data}></Row>
-                        ))}
+                        .map(data => {
+                            if (data.doc_status === "approved") return <Row data={data}></Row>
+                        })}
                         {this.emptyRows > 0 && (
                             <TableRow style={{ height: 53 * this.emptyRows }}>
                             <TableCell colSpan={6} />

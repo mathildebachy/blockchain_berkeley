@@ -82,6 +82,15 @@ export const getRegistrarContractAdress = async (registrar_id) => {
     return result
 }
 
+export const getUniversityContractAdress = async (university_id) => {
+    const requestsRef = db.collection('requests');
+    const query = requestsRef.where('universityList', "array-contains", university_id);
+    const data = await query.get()
+    if (data.empty) return [];
+    let result = []
+    data.forEach(doc => result.push(doc.data().contractAdress));
+    return result
+}
 export const uploadFileToContract = async (file, contractAddress) => {
     const storageRef = storage.ref();
     const fileRef = storageRef.child(file.name);

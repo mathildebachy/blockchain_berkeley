@@ -22,6 +22,7 @@ import HowItWorks from './components/descriptions/HowItWorks';
 import OurTeam from './components/descriptions/OurTeam';
 import UpdateUserInfo from './components/user/UpdateUserInfo';
 import StudentReq2 from './components/StudentReq2';
+import UniversityDashboard from './components/dashboard/UniversityDashboard';
 
 function App() {
   return(
@@ -40,6 +41,7 @@ function App() {
                   <Route exact path="/profile" component={ProfilePage} />
                   <Route exact path="/password-reset" component={PasswordReset}/>
                   <Route exact path="/student-dashboard" component={StudentDashboard}/>
+                  <Route exact path="/university-dashboard" component={UniversityDashboard}/>
                   <Route exact path="/our-values" component={OurValues}/>
                   <Route exact path="/how-it-works" component={HowItWorks}/>
                   <Route exact path="/meet-the-team" component={OurTeam}/>
