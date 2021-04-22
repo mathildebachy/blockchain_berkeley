@@ -95,7 +95,6 @@ export const uploadFileToContract = async (file, contractAddress) => {
     const storageRef = storage.ref();
     const fileRef = storageRef.child(file.name);
     const uploadFile = await fileRef.put(file);
-    console.log(uploadFile);
     const downloadUrl = await fileRef.getDownloadURL();
     const requestsRef = db.collection('requests');
     const query = requestsRef.where('contractAdress', '==', contractAddress);

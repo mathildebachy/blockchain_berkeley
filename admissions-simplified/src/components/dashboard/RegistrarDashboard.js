@@ -222,11 +222,6 @@ class RegistrarDashboard extends React.Component {
         console.log("adresses", contractAdresses);
         this.setState(({data: contractData}))
         this.setState({emptyRows: this.state.rowsPerPage - Math.min(this.state.rowsPerPage, contractData.length - this.state.page*this.state.rowsPerPage)})
-        // let data = await getAllRequestFromRegistar('Lycee La Nativite');
-        // if (data) {
-        //     this.setState({data: data})
-        //     this.setState({emptyRows: this.state.rowsPerPage - Math.min(this.state.rowsPerPage, data.length - this.state.page*this.state.rowsPerPage)})
-        // }
     }
     componentDidMount() {
         this.setState({user: this.context})
@@ -264,31 +259,6 @@ class RegistrarDashboard extends React.Component {
                         ? this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page*this.state.rowsPerPage + this.state.rowsPerPage)
                         : this.state.data)
                         .map(data => (
-                            // <TableRow>
-                            //     <TableCell>{data.student_last_name + ", "+ data.student_first_name || 'none'}</TableCell>
-                            //     <TableCell align="right">{data.doc_type || 'none'}</TableCell>
-                            //     <TableCell align="right">{data.graduation_year || 'none'}</TableCell>
-                            //     <TableCell align="right">
-                            //         {!data.doc_status 
-                            //         ? <Tooltip title="none">
-                            //                 <FiberManualRecordIcon style={{color: 'black'}}/>
-                            //             </Tooltip>
-                            //         : (data.status==="approved"
-                            //             ? <Tooltip title="approved">
-                            //                     <FiberManualRecordIcon style={{color: green[500]}}/>
-                            //                 </Tooltip>
-                            //             : (data.status==="rejected")
-                            //                 ? <Tooltip title="rejected">
-                            //                     <FiberManualRecordIcon style={{color: 'red'}}/>
-                            //                 </Tooltip>
-                            //                 : <Tooltip title="pending">
-                            //                     <FiberManualRecordIcon style={{color: 'orange'}}/>
-                            //                 </Tooltip>
-                            //         )
-                            //     }
-                            //     </TableCell>
-                            //     <TableCell><UploadDocument contracAddress={data.address}></UploadDocument></TableCell>
-                            // </TableRow>
                             <Row data={data}></Row>
                         ))}
                         {this.emptyRows > 0 && (
