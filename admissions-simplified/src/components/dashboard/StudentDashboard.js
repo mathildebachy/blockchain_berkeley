@@ -118,10 +118,11 @@ function Row(props) {
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
-                <TableCell>{data.student_last_name + ", "+ data.student_first_name || 'none'}</TableCell>
-                <TableCell align="right">{data.doc_type || 'none'}</TableCell>
-                <TableCell align="right">{data.graduation_year || 'none'}</TableCell>
+                <TableCell>{data.sendTo || 'none'}</TableCell>
+                <TableCell align="right">{data.doc_description || 'none'}</TableCell>
                 <TableCell align="right">{data.student_school_name || 'none'}</TableCell>
+                <TableCell align="right">{data.graduation_year || 'none'}</TableCell>
+                <TableCell align="right">{data.doc_status || 'none'}</TableCell>
             </TableRow>
             {/* The following contains the dropdown with all the files associated with one contract */}
             <TableRow>
@@ -215,6 +216,7 @@ class StudentDashboard extends React.Component {
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
                         <TableRow>
+                            <TableCell>More info</TableCell>
                             <TableCell>University</TableCell>
                             <TableCell align="right">Description</TableCell>
                             <TableCell align="right">Registrar</TableCell>
