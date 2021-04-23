@@ -112,6 +112,5 @@ export const getAllFilesFromContractAddress = async (contractAddress) => {
     const data = await query.get();
     let result = [];
     data.forEach(doc => result.push(doc.data().files));
-    console.log(result[0])
     return result[0];
 }

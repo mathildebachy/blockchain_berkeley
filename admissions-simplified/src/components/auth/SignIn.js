@@ -17,6 +17,7 @@ const SignIn = () => {
         setredirect('/how-it-works')
       }
     }, [user]);
+    
     if (redirect) {
       history.push(redirect);
     }

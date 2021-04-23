@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect } from 'react'
 
 import { getAllFilesFromContractAddress, getRegistrarContractAdress, uploadFileToContract } from '../../back-end/functions'
 import { getContractData, updateContractStatus, getContract } from '../../back-end/taquito_functions'
@@ -66,7 +67,8 @@ function UploadDocument(props) {
 
   const uploadFiles = async () => {
       files.forEach(async file => {
-          const uploadedFile = await uploadFileToContract(file, contractAddress);
+            const uploadedFile = await uploadFileToContract(file, contractAddress);
+            props.callbackFromParent(file);
       });
       setOpen(false);
   }
@@ -106,15 +108,45 @@ const useRowStyles = makeStyles({
 });
 
 function Row(props) {
-    const { data } = props;
+    const { address, user } = props;
     const [open, setOpen] = React.useState(false);
+    const [doc_status, setDocStatus] = React.useState("")
+    const [doc_type, setDocType] = React.useState("")
+    const [graduation_year, setGraduationYear] = React.useState("")
+    const [first_name, setFirstName] = React.useState("")
+    const [last_name, setLastName] = React.useState("")
+    const [student_school_name, setStudentSchoolName] = React.useState("")
+    const [files, setFiles] = React.useState([])
     const classes = useRowStyles();
+    const [loading, setLoading] = React.useState(false);
+
+    const fetchData = async (userId) => {
+          const contractData = await getContractData(address);
+          const files = await getAllFilesFromContractAddress(address);
+          setFiles(files)
+          setStudentSchoolName(contractData.student_school_name)
+          setFirstName(contractData.student_first_name)
+          setLastName(contractData.student_last_name)
+          setDocType(contractData.doc_type)
+          setDocStatus(contractData.doc_status)
+          setGraduationYear(contractData.graduation_year)
+        }
+    
+    useEffect(() => {
+        fetchData(user.displayName);
+    }, [])
+
+    const setFilesInRow = (new_files) => {
+        setFiles([...files, new_files])
+    }
 
     const sendToUniversity = async () => {
-        const contract = await getContract(data.address);
-        console.log("contract", contract)
-        const newStorage = await updateContractStatus(contract, "approved");
-        console.log("new storage", newStorage)
+        const contract = await getContract(address);
+        setLoading(true);
+        const newStorage = updateContractStatus(contract, "approved").then(new_storage => {
+            setDocStatus("approved");
+            setLoading(false);
+        });
     }
 
     return (
@@ -125,19 +157,19 @@ function Row(props) {
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
-                <TableCell>{data.student_last_name + ", "+ data.student_first_name || 'none'}</TableCell>
-                <TableCell align="right">{data.doc_type || 'none'}</TableCell>
-                <TableCell align="right">{data.graduation_year || 'none'}</TableCell>
+                <TableCell>{last_name + ", "+ first_name}</TableCell>
+                <TableCell align="right">{doc_type}</TableCell>
+                <TableCell align="right">{graduation_year || 'none'}</TableCell>
                 <TableCell align="right">
-                    {!data.doc_status 
+                    {!doc_status 
                     ? <Tooltip title="none">
                             <FiberManualRecordIcon style={{color: 'black'}}/>
                         </Tooltip>
-                    : (data.doc_status==="approved"
+                    : (doc_status==="approved"
                         ? <Tooltip title="approved">
                                 <FiberManualRecordIcon style={{color: green[500]}}/>
                             </Tooltip>
-                        : (data.doc_status==="rejected")
+                        : (doc_status==="rejected")
                             ? <Tooltip title="rejected">
                                 <FiberManualRecordIcon style={{color: 'red'}}/>
                             </Tooltip>
@@ -147,13 +179,14 @@ function Row(props) {
                     )
                 }
                 </TableCell>
-                {data.doc_status==="pending"
+                {doc_status==="pending"
                 ? 
                 <>
-                    <TableCell><UploadDocument contracAddress={data.address}></UploadDocument></TableCell>
-                    <TableCell><Button onClick={sendToUniversity}>Send to university</Button></TableCell>
+                    <TableCell><UploadDocument contracAddress={address} callbackFromParent={setFilesInRow}></UploadDocument></TableCell>
+                    <TableCell><Button onClick={sendToUniversity}>{loading ? "Loading" : "Send to university"}</Button></TableCell>
                 </>
-                :<></>
+                :
+                    <TableCell><Button onClick={sendToUniversity}>{loading ? "Loading" : "Send to university"}</Button></TableCell>
                 }
                 {/* <TableCell><UploadDocument contracAddress={data.address}></UploadDocument></TableCell> */}
             </TableRow>
@@ -173,8 +206,8 @@ function Row(props) {
                                 </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {data.files
-                                    ? data.files.map(file => (
+                                    {files
+                                    ? files.map(file => (
                                         <TableRow key={file.downloadUrl}>
                                             <TableCell component="th" scope="row">
                                                 {file.name || "no name file"}
@@ -199,7 +232,7 @@ class RegistrarDashboard extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            data: [],
+            addresses: [],
             page: 0,
             rowsPerPage: 5,
             emptyRows: 5,
@@ -210,18 +243,9 @@ class RegistrarDashboard extends React.Component {
 
     }
     fetchData = async (userId) => {
-        // TO DO Hook the registrar name
-        let contractAdresses = await getRegistrarContractAdress(userId)
-        let contractData = [];
-        for (const address of contractAdresses) {
-          const data = await getContractData(address);
-          const files = await getAllFilesFromContractAddress(address);
-          contractData.push({...data, address, files});
-        }
-        console.log("contractData", contractData);
-        console.log("adresses", contractAdresses);
-        this.setState(({data: contractData}))
-        this.setState({emptyRows: this.state.rowsPerPage - Math.min(this.state.rowsPerPage, contractData.length - this.state.page*this.state.rowsPerPage)})
+        let contractAddresses = await getRegistrarContractAdress(userId)
+        this.setState(({addresses: contractAddresses}))
+        this.setState({emptyRows: this.state.rowsPerPage - Math.min(this.state.rowsPerPage, contractAddresses.length - this.state.page*this.state.rowsPerPage)})
     }
     componentDidMount() {
         this.setState({user: this.context})
@@ -256,10 +280,10 @@ class RegistrarDashboard extends React.Component {
                     </TableHead>
                     <TableBody>
                         {((this.state.rowsPerPage > 0)
-                        ? this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page*this.state.rowsPerPage + this.state.rowsPerPage)
-                        : this.state.data)
-                        .map(data => (
-                            <Row data={data}></Row>
+                        ? this.state.addresses.slice(this.state.page * this.state.rowsPerPage, this.state.page*this.state.rowsPerPage + this.state.rowsPerPage)
+                        : this.state.addresses)
+                        .map(address => (
+                            <Row address={address} user={this.state.user}></Row>
                         ))}
                         {this.emptyRows > 0 && (
                             <TableRow style={{ height: 53 * this.emptyRows }}>
@@ -272,7 +296,7 @@ class RegistrarDashboard extends React.Component {
                             <TablePagination
                             rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                             colSpan={3}
-                            count={this.state.data.length}
+                            count={this.state.addresses.length}
                             rowsPerPage={this.state.rowsPerPage}
                             page={this.state.page}
                             SelectProps={{
