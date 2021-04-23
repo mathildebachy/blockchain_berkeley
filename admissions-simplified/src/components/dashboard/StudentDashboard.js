@@ -1,5 +1,5 @@
 import React from 'react';
-import { getStudentContractAddresses } from '../../back-end/functions'
+import { getStudentContractAddresses, getAllFilesFromContractAddress } from '../../back-end/functions'
 import { getContractData } from '../../back-end/taquito_functions'
 import { UserContext } from '../../providers/UserProvider'
 
@@ -23,6 +23,13 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { green } from '@material-ui/core/colors';
 import { Tooltip } from '@material-ui/core';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import Collapse from '@material-ui/core/Collapse';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 
 
 const useStyles1 = makeStyles((theme) => ({
@@ -90,6 +97,68 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
+const useRowStyles = makeStyles({
+  root: {
+    '& > *': {
+      borderBottom: 'unset',
+    },
+  },
+});
+
+function Row(props) {
+    const { data } = props;
+    const [open, setOpen] = React.useState(false);
+    const classes = useRowStyles();
+
+    return (
+        <React.Fragment>
+            <TableRow className={classes.root}>
+                <TableCell>
+                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    </IconButton>
+                </TableCell>
+                <TableCell>{data.student_last_name + ", "+ data.student_first_name || 'none'}</TableCell>
+                <TableCell align="right">{data.doc_type || 'none'}</TableCell>
+                <TableCell align="right">{data.graduation_year || 'none'}</TableCell>
+                <TableCell align="right">{data.student_school_name || 'none'}</TableCell>
+            </TableRow>
+            {/* The following contains the dropdown with all the files associated with one contract */}
+            <TableRow>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Box margin={1}>
+                            <Typography variant="h6" gutterBottom component="div">
+                                Uploaded Files
+                            </Typography>
+                            <Table size="small" aria-label="files">
+                                <TableHead>
+                                <TableRow>
+                                    <TableCell>File name</TableCell>
+                                    <TableCell>Download URL</TableCell>
+                                </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {data.files
+                                    ? data.files.map(file => (
+                                        <TableRow key={file.downloadUrl}>
+                                            <TableCell component="th" scope="row">
+                                                {file.name || "no name file"}
+                                            </TableCell>
+                                            <TableCell><Button href={file.downloadUrl}><InsertDriveFileIcon color="primary"></InsertDriveFileIcon>Download File</Button></TableCell>
+                                        </TableRow>
+                                    ))
+                                    : <TableRow><TableCell component="th" scope="row">No files</TableCell></TableRow>
+                                    }
+                                </TableBody>
+                            </Table>
+                        </Box>
+                    </Collapse>
+                </TableCell>
+            </TableRow>
+        </React.Fragment>
+    );
+}
 
 const useStyles = {
   table: {
@@ -116,7 +185,8 @@ class StudentDashboard extends React.Component {
         let contractData = [];
         for (const address of contractAddresses) {
           const data = await getContractData(address);
-          contractData.push({...data, address});
+          const files = await getAllFilesFromContractAddress(address);
+          contractData.push({...data, address, files});
         }
         this.setState(({data: contractData}))
         this.setState({emptyRows: this.state.rowsPerPage - Math.min(this.state.rowsPerPage, contractData.length - this.state.page*this.state.rowsPerPage)})
@@ -157,31 +227,7 @@ class StudentDashboard extends React.Component {
                         ? this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page*this.state.rowsPerPage + this.state.rowsPerPage)
                         : this.state.data)
                         .map(data => (
-                            <TableRow key={data.address}>
-                                <TableCell>{data.send_to.join(", ") || 'none'}</TableCell>
-                                <TableCell align="right">{data.doc_description || 'none'}</TableCell>
-                                <TableCell align="right">{data.student_school_name || 'none'}</TableCell>
-                                <TableCell align="right">{data.graduation_year || 'none'}</TableCell>
-                                <TableCell align="right">
-                                    {!data.doc_status 
-                                    ? <Tooltip title="none">
-                                            <FiberManualRecordIcon style={{color: 'black'}}/>
-                                        </Tooltip>
-                                    : (data.doc_status==="approved"
-                                        ? <Tooltip title="Documents sent to university">
-                                                <FiberManualRecordIcon style={{color: green[500]}}/>
-                                            </Tooltip>
-                                        : (data.doc_status==="rejected")
-                                            ? <Tooltip title="rejected">
-                                                <FiberManualRecordIcon style={{color: 'red'}}/>
-                                            </Tooltip>
-                                            : <Tooltip title="pending">
-                                                <FiberManualRecordIcon style={{color: 'orange'}}/>
-                                            </Tooltip>
-                                    )
-                                }
-                                </TableCell>
-                            </TableRow>
+                          <Row data={data} key={data.address}></Row>
                         ))}
                         {this.emptyRows > 0 && (
                             <TableRow style={{ height: 53 * this.emptyRows }}>

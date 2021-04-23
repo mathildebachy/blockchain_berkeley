@@ -24,7 +24,7 @@ const Header = () => {
               <p>Dashboard</p>
             </Link>
             :
-            <Link to='/registrar' className='container header_button link'>
+            <Link to='/registrar-dashboard' className='container header_button link'>
               <p>Dashboard</p>
             </Link>
             )

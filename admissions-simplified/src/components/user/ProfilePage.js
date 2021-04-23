@@ -19,7 +19,8 @@ const useStyles = makeStyles({
   root: {
     maxWidth: 500,
     height:500,
-    backgroundColor: "#e8cb8f",
+    backgroundColor: "rgb(255,153,0,0.1)",
+    border: "solid rgb(235,95,7,0.3) 0.5px"
   },
   media: {
     height: 140,

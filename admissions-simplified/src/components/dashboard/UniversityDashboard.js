@@ -115,6 +115,7 @@ class RegistrarDashboard extends React.Component {
         super(props)
         this.state = {
             data: [],
+            approved_contract: 0,
             page: 0,
             rowsPerPage: 5,
             emptyRows: 5,
@@ -125,15 +126,16 @@ class RegistrarDashboard extends React.Component {
 
     }
     fetchData = async (userId) => {
-        let contractAdresses = await getUniversityContractAdress('"'+userId+'"')
+        let contractAdresses = await getUniversityContractAdress('"'+userId+'"');
         let contractData = [];
         for (const address of contractAdresses) {
           const data = await getContractData(address);
           const files = await getAllFilesFromContractAddress(address);
           contractData.push({...data, address, files});
+          if (data.doc_status === "approved") {
+            this.setState({approved_contract: this.state.approved_contract+1});
+          }
         }
-        console.log("contractData", contractData);
-        console.log("adresses", contractAdresses);
         this.setState(({data: contractData}))
         this.setState({emptyRows: this.state.rowsPerPage - Math.min(this.state.rowsPerPage, contractData.length - this.state.page*this.state.rowsPerPage)})
     }
@@ -186,7 +188,7 @@ class RegistrarDashboard extends React.Component {
                             <TablePagination
                             rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                             colSpan={3}
-                            count={this.state.data.length}
+                            count={this.state.approved_contract}
                             rowsPerPage={this.state.rowsPerPage}
                             page={this.state.page}
                             SelectProps={{
