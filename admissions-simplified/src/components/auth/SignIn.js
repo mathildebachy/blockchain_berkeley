@@ -14,7 +14,8 @@ const SignIn = () => {
 
     useEffect(() => {
       if (user) {
-        setredirect('/how-it-works')
+        if (user.userType === "student") setredirect('/how-it-works');
+        else setredirect('/');
       }
     }, [user]);
     
