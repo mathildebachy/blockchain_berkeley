@@ -1,5 +1,5 @@
 import { smartContractStorageMLSON } from './smartContract/smartContractStorage.js'
-import { smartContractJSONfile } from './smartContract/smartContractJSON'
+import { smartContractJSONfile } from './smartContract/smartContractJSON.js'
 import { importKey, InMemorySigner } from '@taquito/signer';
 import { TezosToolkit } from '@taquito/taquito';
 
@@ -35,7 +35,19 @@ export const signerInitialization = async () => {
 }
 
 const initContractStorageMLSON = (params) => {
-    return `(Pair (Pair (Pair ${params.date_of_birth} ${params.doc_description}) (Pair ${params.doc_status} ${params.doc_type})) (Pair (Pair ${params.graduation_year} {${params.send_to}}) (Pair ${params.student_first_name} (Pair ${params.student_last_name} ${params.student_school_name}))))`
+    return `(Pair (Pair (Pair ${params.date_of_birth} ${params.doc_description}) (Pair ${params.doc_status} (Pair ${params.doc_type} {}))) (Pair (Pair ${params.graduation_year} {${params.send_to}}) (Pair ${params.student_first_name} (Pair ${params.student_last_name} ${params.student_school_name}))))`
+}
+
+const params = {
+  date_of_birth:'"11/20/1997"',
+  doc_description:'"Fall and Spring transcripts"',
+  doc_status:'"pending"',
+  doc_type:'"Transcript"',
+  graduation_year:'"2021"',
+  send_to:['"Centrale Paris"','"Mines"'].join("; "),
+  student_first_name:'"Mathilde"',
+  student_last_name:'"Bachy"',
+  student_school_name:'"Berkeley"',
 }
 
 export const contractAbstractionOrigination = async (params) => {
@@ -91,8 +103,23 @@ export const updateContractDescription = async (contract, description) => {
   return storageNew
 };
 
-// const contract = await contractAbstractionOrigination(smartContractStorageMLSON);
-// // const contract = await getContract("KT1QAzgCEK2sjHoMyw5gJNcsBkkMV97u6cBJ")
+export const addContractURL = async (contract, URL) => {
+  const updateOp = await contract.methods.add_doc_url(URL).send();
+  const updateOpConfirmation = await updateOp.confirmation(3);
+  const storageNew = await contract.storage(); 
+  return storageNew
+};
+
+// export const initContractURL = async (contract) => {
+//   const updateOp = await contract.methods.init_doc_url().send();
+//   const updateOpConfirmation = await updateOp.confirmation(3);
+//   const storageNew = await contract.storage(); 
+//   return storageNew
+// };
+
+// // const contract = await contractAbstractionOrigination(params);
+// // console.log("OK")
+// const contract = await getContract("KT1K1KvwUJBBap257inLfN2UmDDyYuCqp1td")
 // const contractData = await getContractData(contract.address);
 // // const contractData = await getContractData("KT1QAzgCEK2sjHoMyw5gJNcsBkkMV97u6cBJ");
 
@@ -102,5 +129,10 @@ export const updateContractDescription = async (contract, description) => {
 // // console.log('\nThe doc_status is: %s', contractData.doc_status);
 
 // console.log('\nUpdating...');
-// const updatedContractData = await updateContractDestinations(contract,['Test test']);
-// console.log(updatedContractData);
+// // const updatedContractData = await updateContractDestinations(contract,['Test test']);
+// // console.log(updatedContractData);
+// const updatedContractDataV2 = await addContractURL(contract,"URL2");
+// console.log(updatedContractDataV2);
+// console.log('\nUpdating...');
+// const updatedContractDataV3 = await initContractURL(contract);
+// console.log(updatedContractDataV3);
