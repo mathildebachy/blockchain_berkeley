@@ -89,7 +89,7 @@ class Student_request extends React.Component {
       doc_status: "pending",
       doc_type: this.state.doc_type,
       graduation_year: this.state.transcript_year,
-      send_to: this.state.sendTo.slice(1),
+      send_to: this.state.sendTo.slice(1).join("; "),
       student_first_name: this.state.user.first_name || "",
       student_last_name: this.state.user.last_name || "",
       student_school_name: this.state.user.assignedHS || "",
@@ -100,9 +100,9 @@ class Student_request extends React.Component {
     const contract = await contractAbstractionOrigination(contractParams)
     this.setState({isLoading: false});
     this.setState({isFinished: true});
-    // const contractId = await createContractInDB(this.state.user.uid, this.state.user.assignedHS, contractParams.send_to, contract.address)
-    // console.log(contractId)
-    // this.props.history.push('/student-dashboard')
+    const contractId = await createContractInDB(this.state.user.uid, this.state.user.assignedHS, contractParams.send_to, contract.address)
+    console.log(contractId)
+    this.props.history.push('/student-dashboard')
   }
 
     render() {
