@@ -1,5 +1,5 @@
 import React from 'react';
-import { fectchStudentRequest, getStudentContractAdresses } from '../../back-end/functions'
+import { getStudentContractAddresses } from '../../back-end/functions'
 import { getContractData } from '../../back-end/taquito_functions'
 import { UserContext } from '../../providers/UserProvider'
 
@@ -23,7 +23,6 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { green } from '@material-ui/core/colors';
 import { Tooltip } from '@material-ui/core';
-import { ContactsOutlined } from '@material-ui/icons';
 
 
 const useStyles1 = makeStyles((theme) => ({
@@ -113,12 +112,11 @@ class StudentDashboard extends React.Component {
 
     }
     fetchData = async (userId) => {
-        let contractAdresses = await getStudentContractAdresses(userId)
-        console.log(contractAdresses)
+        let contractAddresses = await getStudentContractAddresses(userId)
         let contractData = [];
-        for (const adress of contractAdresses) {
-          const data = await getContractData(adress);
-          contractData.push(data);
+        for (const address of contractAddresses) {
+          const data = await getContractData(address);
+          contractData.push({...data, address});
         }
         this.setState(({data: contractData}))
         this.setState({emptyRows: this.state.rowsPerPage - Math.min(this.state.rowsPerPage, contractData.length - this.state.page*this.state.rowsPerPage)})
@@ -159,7 +157,7 @@ class StudentDashboard extends React.Component {
                         ? this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page*this.state.rowsPerPage + this.state.rowsPerPage)
                         : this.state.data)
                         .map(data => (
-                            <TableRow>
+                            <TableRow key={data.address}>
                                 <TableCell>{data.send_to.join(", ") || 'none'}</TableCell>
                                 <TableCell align="right">{data.doc_description || 'none'}</TableCell>
                                 <TableCell align="right">{data.student_school_name || 'none'}</TableCell>

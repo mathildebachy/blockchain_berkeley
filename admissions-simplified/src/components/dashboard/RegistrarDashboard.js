@@ -137,7 +137,8 @@ function Row(props) {
     }, [])
 
     const setFilesInRow = (new_files) => {
-        setFiles([...files, new_files])
+        if (files) setFiles([...files, new_files]);
+        else setFiles([new_files]);
     }
 
     const sendToUniversity = async () => {
@@ -186,7 +187,7 @@ function Row(props) {
                     <TableCell><Button onClick={sendToUniversity}>{loading ? "Loading" : "Send to university"}</Button></TableCell>
                 </>
                 :
-                    <TableCell><Button onClick={sendToUniversity}>{loading ? "Loading" : "Send to university"}</Button></TableCell>
+                    <></>
                 }
                 {/* <TableCell><UploadDocument contracAddress={data.address}></UploadDocument></TableCell> */}
             </TableRow>
@@ -275,6 +276,7 @@ class RegistrarDashboard extends React.Component {
                             <TableCell align="right">Document type</TableCell>
                             <TableCell align="right">Year</TableCell>
                             <TableCell align="right">Status</TableCell>
+                            <TableCell align="right"></TableCell>
                             <TableCell align="right"></TableCell>
                         </TableRow>
                     </TableHead>

@@ -17,7 +17,7 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 375,
+    maxWidth: 500,
     height:500,
     backgroundColor: "#e8cb8f",
   },
@@ -70,9 +70,11 @@ const ProfilePage = () => {
                   Update Info
                 </Button>
               </Link>
-              <Button size="medium" color="secondary">
-                Reset Password
-              </Button>
+              <Link to={{pathname:"/password-reset", state:{fromProfilePage:true} }} style={{textDecoration: 'none'}}>
+                <Button size="medium" color="secondary">
+                  Reset Password
+                </Button>
+              </Link>
               <Button size="medium" color="primary" onClick={()=>signOut()}>
                 Sign Out
               </Button>

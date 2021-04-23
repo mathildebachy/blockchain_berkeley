@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";  
-import { firebaseConfig } from './firebase.config'
+import { db, firebaseConfig } from './firebase.config'
 
 
 export const auth = firebase.auth();
@@ -46,3 +46,11 @@ const getUserDocument = async uid => {
     console.error("Error fetching user", error);
   }
 };
+
+export const updateUserDocument = async (uid, new_information) => {
+  try {
+    db.collection('users').doc(uid).set(new_information)
+  } catch (error) {
+    console.error("Error updating user info:", error)
+  }
+}

@@ -1,27 +1,45 @@
 import React, { useEffect, useState, useContext } from "react";
 import {Link} from "react-router-dom";
-import { auth, generateUserDocument } from "../../back-end/firebase";
+import { updateUserDocument } from "../../back-end/firebase";
 import { UserContext } from '../../providers/UserProvider'
 import { useHistory } from 'react-router-dom'
 
+import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core/styles';
+
 import { getAllRegistrar } from '../../back-end/functions'
 
-
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '25ch',
+    },
+  },
+}));
 
 const UpdateUserInfo = () => {
   const user = useContext(UserContext);
   const history = useHistory();
+  const classes = useStyles();
 
   const [newEmail, setNewEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [newDisplayName, setNewDisplayName] = useState("");
-  const [newUserType, setNewUserType] = useState("");
   const [newAssignedHS, setNewAssignedHS] = useState("");
-  const [error, setError] = useState(null);
+  const [newFirstName, setNewFirstName] = useState("");
+  const [newLastName, setNewLastName] = useState("");
   const [isStudent, setIsStudent] = useState(false);
   const [registrarList, setRegistrarList] = useState([]);
 
+  const {photoURL, displayName, email, assignedHS, userType, first_name, last_name} = user;
+
   useEffect(() => {
+    setIsStudent(user.userType === "student")
+    setNewFirstName(user.first_name)
+    setNewLastName(user.last_name)
+    setNewEmail(user.email);
+    setNewAssignedHS(user.assignedHS)
+    setNewDisplayName(user.displayName)
     getAllRegistrar().then(res => {
       setRegistrarList(res)
     })
@@ -33,123 +51,111 @@ const UpdateUserInfo = () => {
     return(<div></div>);
   }
 
-  const {photoURL, displayName, email, assignedHS, userType} = user;
-  console.log(displayName, email, assignedHS, userType)
 
-
-  const updateUserInfo = async (event, email, password) => {
+  const updateUserInfo = async (event) => {
     event.preventDefault();
-
-    setNewEmail("");
-    setPassword("");
-    setNewDisplayName("");
-    setNewUserType("");
-    setIsStudent(false);
-    setNewAssignedHS("")
+    let new_information = {}
+    if (userType === "student") {
+      let newAH = assignedHS;
+      let newFN = first_name;
+      let newLN = last_name;
+      let newEM = email;
+      if (newAssignedHS !== assignedHS && newAssignedHS !== "") newAH = newAssignedHS
+      if (newFirstName !== first_name && newFirstName !== "") newFN = newFirstName;
+      if (newLastName !== last_name && newLastName !== "") newLN = newLastName;
+      if (newEmail !== email && newEmail !== "") newEM = newEmail;
+      const newDN = newLN+", "+newFN;
+      new_information = {
+        displayName: newDN,
+        email: newEM,
+        assignedHS: newAH,
+        first_name: newFN,
+        last_name: newLN,
+        userType: userType,
+        photoURL: photoURL,
+      }
+    } 
+    else {
+      let newDN = displayName
+      let newEM = email;
+      if (newDisplayName !== displayName && newDisplayName !== "") newDN = newDisplayName;
+      if (newEmail !== email && newEmail !== "") newEM = newEmail;
+      new_information = {
+        displayName: newDN,
+        email: newEM,
+        userType: userType,
+        photoURL: photoURL,
+      }
+    }
+    updateUserDocument(user.uid, new_information).then(value => {
+      history.push("/")
+    })
   };
-  
+
   const onChangeHandler = event => {
     const { name, value } = event.currentTarget;
-    if (name === "userEmail") {
-      setNewEmail(value);
-    } else if (name === "userPassword") {
-      setPassword(value);
-    } else if (name === "displayName") {
-      setNewDisplayName(value);
-    }
-    else if (name === "newAssignedHS") {
-      setNewAssignedHS(value)
-    }
-    else if (name === "newUserType"){
-      setNewUserType(value);
-      if (value === "student"){
-        setIsStudent(true);
-      }
-      else {
-        setIsStudent(false);
-        setNewAssignedHS("")
-      }
-    }
+    console.log(name, value)
+    if (name === "userEmail") setNewEmail(value);
+    else if (name === "displayName") setNewDisplayName(value);
+    else if (name === "assignedHS") setNewAssignedHS(value);
+    else if (name === "first_name") setNewFirstName(value);
+    else if (name === "last_name") setNewLastName(value);
   };
   
   return (
     <div className="signup-wrapper">
-      <h1>Update your user information</h1>
+      <h1>Update User Information</h1>
       <div className="signup-card">
-        {error !== null && (
-          <div>
-            {error}
-          </div>
-        )}
-        <form>
-          <label htmlfor="displayname" classname="block">
-            Display Name:
-          </label>
-          <input
-            type="text"
-            name="newDisplayName"
-            value={newDisplayName}
-            placeholder="E.g: Faruq"
-            id="newDisplayName"
-            onChange={event => onChangeHandler(event)}
-          />
-          <label htmlFor="userEmail" className="block">
-            Email:
-          </label>
-          <input
-            type="email"
-            name="newUserEmail"
+        <form className={classes.root} noValidate autoComplete="off">
+          {isStudent
+          ?
+            <>
+              <TextField 
+                required 
+                id="first_name" 
+                name="first_name"
+                value={newFirstName}
+                label="First Name" 
+                onChange={event => onChangeHandler(event)}
+              />
+              <TextField 
+                required 
+                id="last_name" 
+                name="last_name"
+                value={newLastName}
+                label="Last name" 
+                onChange={event => onChangeHandler(event)}
+              />
+            </>
+          :
+          <>
+            <TextField 
+              required 
+              id="displayName" 
+              name="displayName"
+              value={newDisplayName}
+              label="Entity name" 
+              onChange={event => onChangeHandler(event)}
+            />
+          </>
+          }
+          <TextField 
+            required 
+            id="email"
+            type="email" 
+            name="userEmail"
             value={newEmail}
-            placeholder="E.g: faruq123@gmail.com"
-            id="newUserEmail"
+            label="Email" 
             onChange={event => onChangeHandler(event)}
           />
-          <label htmlFor="userPassword" className="block">
-            Password:
-          </label>
-          <input
-            type="password"
-            name="userPassword"
-            value={password}
-            placeholder="Your Password"
-            id="userPassword"
-            onChange={event => onChangeHandler(event)}
-          />
-          <div className="margin">
-            <p>I'm a:</p>
-            <label>
-              <input
-              type="radio"
-              name="newUserType"
-              value="student"
-              onChange={event => onChangeHandler(event)}
-              />Student
-            </label>
-            <label>
-              <input
-              type="radio"
-              name="newUserType"
-              value="university"
-              onChange={event => onChangeHandler(event)}
-              />University
-            </label>
-            <label>
-              <input
-              type="radio"
-              name="newUserType"
-              value="highschool"
-              onChange={event => onChangeHandler(event)}
-              />High School
-            </label>
-          </div>
           {isStudent 
             ? <div className="margin">
-                <label htmlfor="newAssignedHS" classname="block">
+                <label htmlFor="assignedHS" className="block">
                   Current High School:
                 </label>
-                <select value={newAssignedHS} name="newAssignedHS" onChange={event=>onChangeHandler(event)}>
+                <select value={newAssignedHS} name="assignedHS" onChange={event=>onChangeHandler(event)}>
                   {registrarList.map(registrar => (
-                    <option value={registrar.displayName}>{registrar.displayName}</option>
+                    <option value={registrar.displayName} id={registrar.displayName}>{registrar.displayName}</option>
                   ))}
                 </select>
               </div>
@@ -157,15 +163,20 @@ const UpdateUserInfo = () => {
           }
           <button
             className="signup-button margin"
-            onClick={event => {
-              updateUserInfo(event, newEmail, password);
-            }}
+            onClick={updateUserInfo}
           >
-            Update
+            Update information
           </button>
+          <Link to="/profile">
+            <button
+            className="signup-button">
+              Back to profile page
+            </button>
+          </Link>
         </form>
       </div>
     </div>
+   
   );
 };
 

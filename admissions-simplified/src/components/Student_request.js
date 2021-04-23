@@ -50,7 +50,6 @@ class Student_request extends React.Component {
         parsedParams[param] = parsedParams[param].map(elem => '"'+elem+'"');
       }
     }
-    console.log(parsedParams)
     return parsedParams
   }
 
@@ -96,19 +95,14 @@ class Student_request extends React.Component {
       student_school_name: this.state.user.assignedHS || "",
     } 
     contractParams = this.parsingParameters(contractParams);
+    console.log("params", contractParams)
     this.setState({isLoading: true});
     const contract = await contractAbstractionOrigination(contractParams)
     this.setState({isLoading: false});
     this.setState({isFinished: true});
-    const contractId = await createContractInDB(this.state.user.uid, this.state.user.assignedHS, contractParams.send_to, contract.address)
-    console.log(contractId)
-    this.props.history.push('/student-dashboard')
-
-    // Reset the fields of this.state
-    // for (const key of Object.keys(this.state)) {
-    //   this.setState({[key]: ''})
-    // }
-    // this.setState({isTranscript: false})
+    // const contractId = await createContractInDB(this.state.user.uid, this.state.user.assignedHS, contractParams.send_to, contract.address)
+    // console.log(contractId)
+    // this.props.history.push('/student-dashboard')
   }
 
     render() {
@@ -130,13 +124,6 @@ class Student_request extends React.Component {
               </label>
               {this.state.isTranscript &&
               <div>
-                {/* <label>
-                  Season:
-                  <select class="form_containter" value={this.state.semester} name="semester" onChange={this.handleChange}>
-                    <option value="fall ">Fall</option>
-                    <option value="spring">Spring</option>
-                  </select>
-                </label> */}
                 <label>
                   Graduation Year:
                   <input className="form_containter" type="text" name="transcript_year" value={this.state.transcript_year} onChange={this.handleChange} />
@@ -149,7 +136,7 @@ class Student_request extends React.Component {
               </label>
               {this.state.sendTo.map((university, index) => (
               <div className="margin">
-                  <label htmlfor="sendTo" classname="block">
+                  <label htmlFor="sendTo" className="block">
                     Send to:
                   </label>
                   <select id={index} value={this.sendTo} name="sendTo" onChange={this.handleChange}>
@@ -160,17 +147,6 @@ class Student_request extends React.Component {
                   </select>
                 </div>
               ))}
-              {/* <div className="margin">
-                  <label htmlfor="sendTo" classname="block">
-                    Send to:
-                  </label>
-                  <select value={this.sendTo} name="sendTo" onChange={this.handleChange}>
-                    <option value="default">- Select -</option>
-                    {this.state.universityList.map(university => (
-                      <option value={university.displayName}>{university.displayName}</option>
-                    ))}
-                  </select>
-                </div> */}
               <input type="submit" value="Submit" className="submit"/>
               {this.state.isLoading
               ? <CircularProgress />

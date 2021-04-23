@@ -62,7 +62,7 @@ export const getAllRequestFromRegistar = async (registrar) => {
     return result;
 }
 
-export const getStudentContractAdresses = async (student_uid) => {
+export const getStudentContractAddresses = async (student_uid) => {
     const requestsRef = db.collection('requests');
     const query = requestsRef.where('studentId', '==', student_uid);
     const data = await query.get()
