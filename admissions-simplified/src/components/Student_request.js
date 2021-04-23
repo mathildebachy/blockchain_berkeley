@@ -94,13 +94,14 @@ class Student_request extends React.Component {
       student_last_name: this.state.user.last_name || "",
       student_school_name: this.state.user.assignedHS || "",
     } 
-    contractParams = this.parsingParameters(contractParams);
+    console.log(this.state.sendTo.slice(1))
+    const parsedParams = this.parsingParameters(contractParams);
     console.log("params", contractParams)
     this.setState({isLoading: true});
-    const contract = await contractAbstractionOrigination(contractParams)
+    const contract = await contractAbstractionOrigination(parsedParams)
     this.setState({isLoading: false});
     this.setState({isFinished: true});
-    const contractId = await createContractInDB(this.state.user.uid, this.state.user.assignedHS, contractParams.send_to, contract.address)
+    const contractId = await createContractInDB(this.state.user.uid, this.state.user.assignedHS, this.state.sendTo.slice(1), contract.address)
     console.log(contractId)
     this.props.history.push('/student-dashboard')
   }

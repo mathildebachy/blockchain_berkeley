@@ -126,7 +126,7 @@ class RegistrarDashboard extends React.Component {
 
     }
     fetchData = async (userId) => {
-        let contractAdresses = await getUniversityContractAdress('"'+userId+'"');
+        let contractAdresses = await getUniversityContractAdress(userId);
         let contractData = [];
         for (const address of contractAdresses) {
           const data = await getContractData(address);
