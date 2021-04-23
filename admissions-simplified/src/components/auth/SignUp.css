@@ -38,7 +38,7 @@
 }
 
 .margin {
-    margin-top: 1vh;
+    margin-bottom: 1vh;
 }
 
 .signup-button:hover {
@@ -49,4 +49,8 @@
 
 .additional-info {
     align-self: flex-start;
+}
+
+.small-text {
+    font-size: 0.6em;
 }

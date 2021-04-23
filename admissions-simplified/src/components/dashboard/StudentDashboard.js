@@ -114,16 +114,13 @@ class StudentDashboard extends React.Component {
     }
     fetchData = async (userId) => {
         let contractAdresses = await getStudentContractAdresses(userId)
+        console.log(contractAdresses)
         let contractData = [];
         for (const adress of contractAdresses) {
           const data = await getContractData(adress);
           contractData.push(data);
         }
-        console.log("contractData", contractData);
-        console.log("adresses", contractAdresses);
         this.setState(({data: contractData}))
-        // let data = await fectchStudentRequest('gilles');
-        // this.setState({data: data})
         this.setState({emptyRows: this.state.rowsPerPage - Math.min(this.state.rowsPerPage, contractData.length - this.state.page*this.state.rowsPerPage)})
     }
     componentDidMount() {
@@ -132,7 +129,6 @@ class StudentDashboard extends React.Component {
         else if (!this.context.userType || this.context.userType !== "student") this.props.history.push('/')
         else {
           this.fetchData(this.context.uid);
-          console.log("user", this.context.uid, this.context.displayName);
         }
     }
     handleChangeRowsPerPage(event) {
