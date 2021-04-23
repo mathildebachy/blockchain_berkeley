@@ -109,6 +109,7 @@ function Row(props) {
     const { data } = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
+    console.log(data)
 
     return (
         <React.Fragment>
@@ -118,7 +119,7 @@ function Row(props) {
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
-                <TableCell>{data.sendTo || 'none'}</TableCell>
+                <TableCell>{data.send_to.join(", ") || 'none'}</TableCell>
                 <TableCell align="right">{data.doc_description || 'none'}</TableCell>
                 <TableCell align="right">{data.student_school_name || 'none'}</TableCell>
                 <TableCell align="right">{data.graduation_year || 'none'}</TableCell>
