@@ -118,7 +118,7 @@ function Row(props) {
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
-                <TableCell>{data.sendTo || 'none'}</TableCell>
+                <TableCell>{data.send_to || 'none'}</TableCell>
                 <TableCell align="right">{data.doc_description || 'none'}</TableCell>
                 <TableCell align="right">{data.student_school_name || 'none'}</TableCell>
                 <TableCell align="right">{data.graduation_year || 'none'}</TableCell>

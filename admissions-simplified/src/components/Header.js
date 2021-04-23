@@ -49,7 +49,7 @@ const Header = () => {
         </div>
 
         <div className="container header_button">
-            <p>Stats</p>
+            <p>Make a request</p>
         </div>
         
         <Link to='/sign-in' className='container header_button link'>
@@ -72,7 +72,7 @@ const Header = () => {
           <li><Link to="/components/univ.js">Get Started</Link></li>
           <li><Link to='/how-it-works'>How it works</Link></li>
           <li><Link to='/our-values'>Our values</Link></li>
-          <li><Link to='/stats'>Stats</Link></li>
+          <li><Link to='/student-request'>Make a request</Link></li>
           <li><Link to='/sign-in'>Sign in</Link></li>
       </ul>
       </div>

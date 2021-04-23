@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import './Header.css';
 import logo from './../assets/logo.png'
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import { UserContext } from '../providers/UserProvider'
 
 const Header = () => {
@@ -24,12 +24,23 @@ const Header = () => {
     <ul className='nested-menu'>
       <li><Link to='/how-it-works'>How it works</Link></li>
       <li><Link to='/our-values'>Our values</Link></li>
-      <li><Link to='/stats'>Stats</Link></li>
+      
+      {!user.userType 
+          ? <div></div> 
+          : (user.userType === "student"
+            ?
+            <li><Link to='/student-request'>Make a request</Link></li>
+            :(user.userType === "university"
+              ? <li></li>
+              : <li></li>
+            )
+            )
+        }
 
       {!user.userType 
           ? <div></div> 
           : (user.userType === "student"
-            ? 
+            ?
             <li><Link to='/student-dashboard'>Dashboard</Link></li>
             :(user.userType === "university"
               ? <li><Link to='/university-dashboard'>Dashboard</Link></li>
@@ -58,7 +69,6 @@ const Header = () => {
       <ul className='nested-menu'>
         <li><Link to='/how-it-works'>How it works</Link></li>
         <li><Link to='/our-values'>Our values</Link></li>
-        <li><Link to='/stats'>Stats</Link></li>
         <li><Link to='/sign-in'>Sign in</Link></li>
       </ul>
       </div>

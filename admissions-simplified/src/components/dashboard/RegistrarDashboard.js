@@ -35,7 +35,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import SaveIcon from '@material-ui/icons/Save';
+import SendIcon from '@material-ui/icons/Send';
+import PublishIcon from '@material-ui/icons/Publish';
 
 import {DropzoneArea} from 'material-ui-dropzone'
 
@@ -75,7 +78,7 @@ function UploadDocument(props) {
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button variant="outlined" color="secondary" onClick={handleClickOpen}>
         Upload File
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -90,7 +93,7 @@ function UploadDocument(props) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={uploadFiles} color="primary">
+          <Button color="secondary" onClick={uploadFiles}>
             Upload 
           </Button>
         </DialogActions>
@@ -158,7 +161,7 @@ function Row(props) {
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
-                <TableCell>{last_name + ", "+ first_name}</TableCell>
+                <TableCell>{first_name + " "+ last_name}</TableCell>
                 <TableCell align="right">{doc_type}</TableCell>
                 <TableCell align="right">{graduation_year || 'none'}</TableCell>
                 <TableCell align="right">
@@ -184,7 +187,7 @@ function Row(props) {
                 ? 
                 <>
                     <TableCell><UploadDocument contracAddress={address} callbackFromParent={setFilesInRow}></UploadDocument></TableCell>
-                    <TableCell><Button onClick={sendToUniversity}>{loading ? "Loading" : "Send to university"}</Button></TableCell>
+                    <TableCell><Button variant="contained" color="secondary" className={classes.button} startIcon={<SendIcon />} onClick={sendToUniversity}>{loading ? "Loading" : "Send to university"}</Button></TableCell>
                 </>
                 :
                     <></>
@@ -213,7 +216,7 @@ function Row(props) {
                                             <TableCell component="th" scope="row">
                                                 {file.name || "no name file"}
                                             </TableCell>
-                                            <TableCell><Button href={file.downloadUrl}><InsertDriveFileIcon color="primary"></InsertDriveFileIcon>Download File</Button></TableCell>
+                                            <TableCell><Button variant="outlined" href={file.downloadUrl}><GetAppIcon color="default"></GetAppIcon> Download File</Button></TableCell>
                                         </TableRow>
                                     ))
                                     : <TableRow><TableCell component="th" scope="row">No files</TableCell></TableRow>
