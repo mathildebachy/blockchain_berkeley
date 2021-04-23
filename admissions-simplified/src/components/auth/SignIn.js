@@ -74,11 +74,6 @@ const SignIn = () => {
           </button>
         </form>
         <div className="additional-info">
-          <p>or</p>
-          <button className="signin-button"
-            onClick = {() => signInWithGoogle()}>
-            Sign in with Google
-          </button>
           <p>
             Don't have an account?{" "}
             <Link to="sign-up">
