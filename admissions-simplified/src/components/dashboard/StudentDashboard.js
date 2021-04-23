@@ -167,11 +167,11 @@ class StudentDashboard extends React.Component {
                                     ? <Tooltip title="none">
                                             <FiberManualRecordIcon style={{color: 'black'}}/>
                                         </Tooltip>
-                                    : (data.status==="approved"
+                                    : (data.doc_status==="approved"
                                         ? <Tooltip title="Documents sent to university">
                                                 <FiberManualRecordIcon style={{color: green[500]}}/>
                                             </Tooltip>
-                                        : (data.status==="rejected")
+                                        : (data.doc_status==="rejected")
                                             ? <Tooltip title="rejected">
                                                 <FiberManualRecordIcon style={{color: 'red'}}/>
                                             </Tooltip>
