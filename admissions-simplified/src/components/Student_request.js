@@ -112,7 +112,7 @@ class Student_request extends React.Component {
         <div className="student_request">
           <div className="border">
             <h1>
-              Student request form { this.state.user.displayName || ''}
+              Student request form { this.state.user.first_name || ''}
             </h1>
             <form onSubmit={this.handleSubmit}>
               <label >

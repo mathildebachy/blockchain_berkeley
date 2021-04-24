@@ -100,14 +100,14 @@ const SignUp = () => {
         )}
         <form className={classes.root} noValidate autoComplete="off">
           <div className="margin">
-            <p>I am a:</p>
+            <p><strong>I am a:</strong></p>
             <label>
               <input
               type="radio"
               name="userType"
               value="student"
               onChange={event => onChangeHandler(event)}
-              />Student
+              /><strong>Student</strong>
             </label>
             <label>
               <input
@@ -115,7 +115,7 @@ const SignUp = () => {
               name="userType"
               value="university"
               onChange={event => onChangeHandler(event)}
-              />University
+              /><strong>University</strong>
             </label>
             <label>
               <input
@@ -123,7 +123,7 @@ const SignUp = () => {
               name="userType"
               value="highschool"
               onChange={event => onChangeHandler(event)}
-              />High School
+              /><strong>High School</strong>
             </label>
           </div>
           {isStudent
@@ -195,7 +195,7 @@ const SignUp = () => {
           {isStudent 
             ? <div className="margin">
                 <label htmlfor="assignedHS" classname="block">
-                  Current High School:
+                <strong>Current High School:</strong>
                 </label>
                 <select value={assignedHS} name="assignedHS" onChange={event=>onChangeHandler(event)}>
                   {registrarList.map(registrar => (
@@ -211,7 +211,7 @@ const SignUp = () => {
               createUserWithEmailAndPasswordHandler(event, email, password);
             }}
           >
-            Sign up
+            <strong>Sign up</strong>
           </button>
         </form>
         <p>

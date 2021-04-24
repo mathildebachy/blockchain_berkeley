@@ -20,7 +20,7 @@ const useStyles = makeStyles({
     maxWidth: 500,
     height:500,
     backgroundColor: "rgb(255,153,0,0.1)",
-    border: "solid rgb(235,95,7,0.3) 0.5px"
+    border: "solid #dcae52 0.5px"
   },
   media: {
     height: 140,

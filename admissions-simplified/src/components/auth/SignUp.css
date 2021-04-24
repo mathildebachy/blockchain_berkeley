@@ -18,7 +18,7 @@
     border-radius: 5px;
 
     margin-bottom: 5vh;
-    padding: 20px 70px;
+    padding: 20px 60px;
 
     display: flex;
     flex-direction: column;
@@ -26,8 +26,8 @@
 }
 
 .signup-button {
-    width: 10vw;
     min-height: 2.5vh;
+    padding: 8px 0px;
     border-radius: 5px;
     text-align: center;
     vertical-align: middle;
@@ -38,12 +38,12 @@
 }
 
 .margin {
-    margin-bottom: 1vh;
+    margin-bottom: 20px;
 }
 
 .signup-button:hover {
     color: rgb(35,47,62);
-    background-color: rgb(255,153,0);
+    background-color: rgb(255,153,0,0.7);
     cursor: pointer;
 }
 

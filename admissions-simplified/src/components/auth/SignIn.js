@@ -49,7 +49,7 @@ const SignIn = () => {
         {error !== null && <div>{error}</div>}
         <form className="">
           <label htmlFor="userEmail" className="block">
-            Email:
+            <strong>Email:</strong>
           </label>
           <input
             type="email"
@@ -60,7 +60,7 @@ const SignIn = () => {
             onChange = {(event) => onChangeHandler(event)}
           />
           <label htmlFor="userPassword" className="block">
-            Password:
+            <strong>Password:</strong>
           </label>
           <input
             type="password"
@@ -71,7 +71,7 @@ const SignIn = () => {
             onChange = {(event) => onChangeHandler(event)}
           />
           <button className="signin-button margin" onClick = {(event) => {signInWithEmailAndPasswordHandler(event, email, password)}}>
-            Sign in
+            <strong>Sign in</strong>
           </button>
         </form>
         <div className="additional-info">

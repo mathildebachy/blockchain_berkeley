@@ -12,8 +12,11 @@ const Home = () => {
     return (
       <div className="home">
         <div>
+          <h1>Welcome!</h1>
           <h1>Transcripts and Degrees on Blockchain</h1>
           <h3>Forgery-proof and 100% digital certificates: more than 100 institutions and 15 countries trust in us to issue blockchain digital credentials</h3>
+          <p className="text2"><strong>Admissions Simplified</strong> currently works with high schools, colleges, and universities across the world. Our current pool of students is at 5,000 and counting, and we have currently established partnerships with four major schools <em>(University of California, Berkeley, Stanford University, California State University – East Bay, College of San Mateo, and San Francisco State University)</em>.</p>
+          <h3>Join us today! Please <Link to='/contact-us'>Contact Us</Link> for more information about getting involved in our ecosystem! </h3>
         </div>
         {!user 
         ?

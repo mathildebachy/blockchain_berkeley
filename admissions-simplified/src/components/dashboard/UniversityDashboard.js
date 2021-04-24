@@ -35,6 +35,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 import {DropzoneArea} from 'material-ui-dropzone'
 
@@ -67,7 +68,7 @@ function Row(props) {
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
-                <TableCell>{data.student_last_name + ", "+ data.student_first_name || 'none'}</TableCell>
+                <TableCell>{data.student_first_name + " "+ data.student_last_name || 'none'}</TableCell>
                 <TableCell align="right">{data.doc_type || 'none'}</TableCell>
                 <TableCell align="right">{data.graduation_year || 'none'}</TableCell>
                 <TableCell align="right">{data.student_school_name || 'none'}</TableCell>
@@ -94,7 +95,7 @@ function Row(props) {
                                             <TableCell component="th" scope="row">
                                                 {file.name || "no name file"}
                                             </TableCell>
-                                            <TableCell><Button href={file.downloadUrl}><InsertDriveFileIcon color="primary"></InsertDriveFileIcon>Download File</Button></TableCell>
+                                            <TableCell><Button variant="outlined" color="secondary" href={file.downloadUrl}><GetAppIcon color="default"></GetAppIcon>Download File</Button></TableCell>
                                         </TableRow>
                                     ))
                                     : <TableRow><TableCell component="th" scope="row">No files</TableCell></TableRow>
@@ -167,7 +168,7 @@ class RegistrarDashboard extends React.Component {
                             <TableCell>Student Name</TableCell>
                             <TableCell align="right">Document type</TableCell>
                             <TableCell align="right">Year</TableCell>
-                            <TableCell align="right">Registrar</TableCell>
+                            <TableCell align="right">Institution</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
