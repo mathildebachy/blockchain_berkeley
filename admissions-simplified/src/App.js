@@ -23,6 +23,9 @@ import OurTeam from './components/descriptions/OurTeam';
 import UpdateUserInfo from './components/user/UpdateUserInfo';
 import StudentReq2 from './components/StudentReq2';
 import UniversityDashboard from './components/dashboard/UniversityDashboard';
+import Payment from './components/demo/Payment';
+import PaymentConfirmation from './components/demo/PaymentConfirmation';
+
 
 function App() {
   return(
@@ -48,6 +51,8 @@ function App() {
                   <Route exact path="/contact-us" component={OurTeam}/>
                   <Route exact path="/update-info" component={UpdateUserInfo}/>
                   <Route exact path="/test" component={StudentReq2}/>
+                  <Route exact path="/payment" component={Payment}/>
+                  <Route exact path="/payment-confirmation" component={PaymentConfirmation}/>
 
                 </Switch>
               <Footer />

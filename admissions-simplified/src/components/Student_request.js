@@ -103,7 +103,7 @@ class Student_request extends React.Component {
     this.setState({isFinished: true});
     const contractId = await createContractInDB(this.state.user.uid, this.state.user.assignedHS, this.state.sendTo.slice(1), contract.address)
     console.log(contractId)
-    this.props.history.push('/student-dashboard')
+    this.props.history.push('/payment')
   }
 
     render() {

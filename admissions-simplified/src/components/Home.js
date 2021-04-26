@@ -21,7 +21,7 @@ const Home = () => {
         {!user 
         ?
         <div class="home_buttons">
-          <Link to="/sign-in">
+          <Link to="/sign-up">
             <button class="home_button">
                 <p>Get started now</p>
             </button>
